@@ -1,8 +1,13 @@
-/*
- * OdometryDisplay.java
- */
+package team10;
 
-package ev3BallLauncher;
+/*
+ * File: OdometryDisplay.java
+ * Written by: Mathieu Tougas
+ * ECSE 211 - Team 10
+ * Winter 2017
+ * 
+ * Odometry display class for testing
+ */
 
 import lejos.hardware.lcd.TextLCD;
 

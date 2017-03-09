@@ -1,15 +1,22 @@
-package ev3BallLauncher;
+package team10;
+
+/*
+ * File: Main.java
+ * Written by: Mathieu Tougas
+ * ECSE 211 - Team 10
+ * Winter 2017
+ * 
+ * Main class for robot control
+ */
 
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
-public class Lab5 {
+public class Main {
 	
 	// Static Resources:
-	// Left motor connected to output A
-	// Right motor connected to output D
 	private static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
 	private static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 	private static final EV3LargeRegulatedMotor catapultMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));

@@ -1,8 +1,13 @@
-/*
- * Odometer.java
- */
+package team10;
 
-package ev3BallLauncher;
+/*
+ * File: Odometer.java
+ * Written by: Mathieu Tougas
+ * ECSE 211 - Team 10
+ * Winter 2017
+ * 
+ * Odometer class
+ */
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
@@ -11,10 +16,9 @@ public class Odometer extends Thread {
 	private double x, y, theta;
 	private int leftMotorTachoCount, rightMotorTachoCount;
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
+	private double wheelRadius, wheelBase;
 	// odometer update period, in ms
 	private static final long ODOMETER_PERIOD = 25;
-	private final double wheelRadius = 2.1; // cm
-	private final double wheelBase = 15.7; //Outside-Outside 17.8cm - Middle-Middle 15.1cm - Inside-Inside 12.9cm
 
 	// lock object for mutual exclusion
 	private Object lock;
@@ -28,6 +32,8 @@ public class Odometer extends Thread {
 		this.theta = 0.0;
 		this.leftMotorTachoCount = 0;
 		this.rightMotorTachoCount = 0;
+		this.wheelBase = Main.TRACK;
+		this.wheelRadius = Main.WHEEL_RADIUS;
 		lock = new Object();
 	}
 

@@ -1,4 +1,13 @@
-package ev3BallLauncher;
+package team10;
+
+/*
+ * File: Catapult.java
+ * Written by: Mathieu Tougas
+ * ECSE 211 - Team 10
+ * Winter 2017
+ * 
+ * Catapult class for launcher control
+ */
 
 import lejos.hardware.Button;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
