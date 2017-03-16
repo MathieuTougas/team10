@@ -1,16 +1,14 @@
 package team10;
 
-/*
- * File: USLocalizer.java
- * Written by: Mathieu Tougas
- * ECSE 211 - Team 10
- * Winter 2017
- * 
- * Localizer class
- */
-
-
 import lejos.robotics.SampleProvider;
+
+/**
+ * Handles the ultrasonic sensor localization routine
+ * 
+ * @author Mathieu Tougas
+ * @version 1.0
+ * 
+ */
 
 public class USLocalizer {
 	public enum LocalizationType { FALLING_EDGE, RISING_EDGE };
@@ -26,6 +24,11 @@ public class USLocalizer {
 	float bandCenter = 50;
 	float distError;
 	
+	/**
+	 * Constructor method
+	 * 
+	 * @since 1.0
+	 */
 	public USLocalizer(Odometer odo,  SampleProvider usSensor, float[] usData, LocalizationType locType) {
 		this.odo = odo;
 		this.usSensor = usSensor;
@@ -33,6 +36,11 @@ public class USLocalizer {
 	    this.locType = locType;
 	}
 	
+	/**
+	 * Does the ev3 localisation routine
+	 * 
+	 * @since 1.0
+	 */
 	public void doLocalization() {
 		angleA = 0; 
 		angleB = 0;
@@ -53,7 +61,7 @@ public class USLocalizer {
 			// keep rotating until the robot sees a wall, then latch the angle
 			turnUntilWall();
 			navigation.setSpeeds(0,0);
-			angleA = odo.getAng();
+			angleA = odo.getTheta();
 			
 			// switch direction and wait until it sees no wall
 			navigation.setSpeeds(-ROTATION_SPEED,ROTATION_SPEED);
@@ -62,7 +70,7 @@ public class USLocalizer {
 			// keep rotating until the robot sees a wall, then latch the angle
 			turnUntilWall();
 			navigation.setSpeeds(0,0);
-			angleB = odo.getAng();
+			angleB = odo.getTheta();
 			
 			// get theta, turn to it and update position
 			theta = getStartingAngle(angleA, angleB);
@@ -89,7 +97,7 @@ public class USLocalizer {
 			
 			// Stop the robot, get the first angle
 			navigation.setSpeeds(0,0);
-			angleB = odo.getAng();
+			angleB = odo.getTheta();
 			
 			// Face away
 			navigation.turnAng(45,true);
@@ -100,7 +108,7 @@ public class USLocalizer {
 			
 			// Stop the robot, get the second angle
 			navigation.setSpeeds(0,0);
-			angleA = odo.getAng();
+			angleA = odo.getTheta();
 			
 			// get the starting angle
 			theta = getStartingAngle(angleA, angleB);
@@ -114,20 +122,14 @@ public class USLocalizer {
 			navigation.turnTo(theta, true);
 			odo.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
 			
-			/*
-			 * The robot should turn until it sees the wall, then look for the
-			 * "rising edges:" the points where it no longer sees the wall.
-			 * This is very similar to the FALLING_EDGE routine, but the robot
-			 * will face toward the wall for most of it.
-			 */
-			
-			//
-			// FILL THIS IN
-			//
 		}
 	}
 	
-	// Turn until the sensor doesn't see a wall anymore
+	/**
+	 * Turns the robot until the sensors don't detect a wall anymore
+	 * 
+	 * @since 1.0
+	 */
 	private void turnUntilNoWall(){
 		distance = getFilteredData();
 		distError = bandCenter - distance;
@@ -142,7 +144,11 @@ public class USLocalizer {
 		}
 	}
 	
-	// Turn until the sensor detects a wall
+	/**
+	 * Turns the robot until the sensors detect a wall
+	 * 
+	 *  @since 1.0
+	 */
 	private void turnUntilWall(){
 		distance = getFilteredData();
 		distError = bandCenter - distance;
@@ -157,7 +163,11 @@ public class USLocalizer {
 		}
 	}
 	
-	// Get the data from the ultrasonic sensor
+	/**
+	 *  Get filtered data from US Sensor
+	 * 
+	 *  @since 1.0
+	 */
 	private float getFilteredData() {
 		usSensor.fetchSample(usData, 0);
 		float distance = usData[0]*100;
@@ -168,7 +178,11 @@ public class USLocalizer {
 		return distance;
 	}
 	
-	// Returns the angle in degrees
+	/**
+	 *  Return starting angle in degrees
+	 * 
+	 *  @since 1.0
+	 */
 	private double getStartingAngle(double alpha, double beta){
 		double angleDiff;
 		if (alpha <= beta){

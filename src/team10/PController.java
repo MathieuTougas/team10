@@ -1,17 +1,17 @@
 package team10;
 
-/*
- * File: PController.java
- * Written by: Mathieu Tougas
- * ECSE 211 - Team 10
- * Winter 2017
- * 
- * Proportionnal controller for object avoidance
- */
-
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
-public class PController implements UltrasonicController {
+/**
+ * Handles the object avoidance routine
+ * 
+ * @author Mathieu Tougas
+ * @version 1.0
+ * 
+ */
+
+
+public class PController {
 	
 	private final int bandCenter, bandwidth;
 	private final int motorStraight = 200, FILTER_OUT = 20;
@@ -21,6 +21,11 @@ public class PController implements UltrasonicController {
 	private Double propConst = 1.8;
 	private int maxCorrection = 160;
 	
+	/**
+	 *  Constructor
+	 * 
+	 *  @since 1.0
+	 */
 	public PController(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor,
 					   int bandCenter, int bandwidth) {
 		//Default Constructor
@@ -35,7 +40,11 @@ public class PController implements UltrasonicController {
 		filterControl = 0;
 	}
 	
-	@Override
+	/**
+	 *  Filters the US data
+	 * 
+	 *  @since 1.0
+	 */
 	public void processUSData(int distance) {
 
 		// rudimentary filter - toss out invalid samples corresponding to null
@@ -94,6 +103,11 @@ public class PController implements UltrasonicController {
 		}
 	}
 	
+	/**
+	 *  Calculates the proportionality for direction adjustments
+	 * 
+	 *  @since 1.0
+	 */
 	int calcProp (int diff, boolean leftTurn) {
 		int correction;
 		if (leftTurn == true)
@@ -107,8 +121,11 @@ public class PController implements UltrasonicController {
 		return correction;
 		}
 
-	
-	@Override
+	/**
+	 *  Gets US distance from sensor
+	 * 
+	 *  @since 1.0
+	 */
 	public int readUSDistance() {
 		return this.distance;
 	}

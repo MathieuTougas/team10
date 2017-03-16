@@ -1,15 +1,14 @@
 package team10;
 
-/*
- * File: UltrasonicPoller.java
- * Written by: Mathieu Tougas
- * ECSE 211 - Team 10
- * Winter 2017
- * 
- * Ultrasonic poller thread for object avoidance
- */
-
 import lejos.robotics.SampleProvider;
+
+/**
+ * Ultrasonic poller thread for object avoidance
+ * 
+ * @author Mathieu Tougas
+ * @version 1.0
+ * 
+ */
 
 //
 //  Control of the wall follower is applied periodically by the 
@@ -24,10 +23,10 @@ import lejos.robotics.SampleProvider;
 
 public class UltrasonicPoller extends Thread{
 	private SampleProvider us;
-	private UltrasonicController cont;
+	private PController cont;
 	private float[] usData;
 	
-	public UltrasonicPoller(SampleProvider us, float[] usData, UltrasonicController cont) {
+	public UltrasonicPoller(SampleProvider us, float[] usData, PController cont) {
 		this.us = us;
 		this.cont = cont;
 		this.usData = usData;

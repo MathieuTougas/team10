@@ -1,15 +1,14 @@
 package team10;
 
-/*
- * File: Odometer.java
- * Written by: Mathieu Tougas
- * ECSE 211 - Team 10
- * Winter 2017
- * 
- * Odometer class
- */
-
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+
+/**
+ * Handles odometer functions for robot
+ * 
+ * @author Mathieu Tougas
+ * @version 1.0
+ * 
+ */
 
 public class Odometer extends Thread {
 	// robot position
@@ -23,7 +22,11 @@ public class Odometer extends Thread {
 	// lock object for mutual exclusion
 	private Object lock;
 
-	// default constructor
+	/**
+	 *  Constructor
+	 * 
+	 *  @since 1.0
+	 */
 	public Odometer(EV3LargeRegulatedMotor leftMotor,EV3LargeRegulatedMotor rightMotor) {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
@@ -37,7 +40,11 @@ public class Odometer extends Thread {
 		lock = new Object();
 	}
 
-	// run method (required for Thread)
+	/**
+	 *  Runs the odometer as a thread
+	 * 
+	 *  @since 1.0
+	 */
 	public void run() {
 		long updateStart, updateEnd;
 
@@ -104,7 +111,11 @@ public class Odometer extends Thread {
 		}
 	}
 
-	// accessors
+	/**
+	 *  Accesssor
+	 * 
+	 *  @since 1.0
+	 */
 	public void getPosition(double[] position, boolean[] update) {
 		// ensure that the values don't change while the odometer is running
 		synchronized (lock) {
@@ -147,7 +158,11 @@ public class Odometer extends Thread {
 		return result;
 	}
 
-	// mutators
+	/**
+	 *  Mutator
+	 * 
+	 *  @since 1.0
+	 */
 	public void setPosition(double[] position, boolean[] update) {
 		// ensure that the values don't change while the odometer is running
 		synchronized (lock) {

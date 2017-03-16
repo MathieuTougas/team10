@@ -1,24 +1,23 @@
 package team10;
 
-/*
- * File: Main.java
- * Written by: Mathieu Tougas
- * ECSE 211 - Team 10
- * Winter 2017
- * 
- * Main class for robot control
- */
-
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
+/**
+ * Main class for robot control
+ * 
+ * @author Mathieu Tougas
+ * @version 1.0
+ * 
+ */
+
 public class Main {
 	
 	// Static Resources:
-	private static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
-	private static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+	static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+	static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 	private static final EV3LargeRegulatedMotor catapultMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
 	private static final EV3LargeRegulatedMotor stabilizerMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
 
@@ -35,7 +34,7 @@ public class Main {
 		final TextLCD t = LocalEV3.get().getTextLCD();
 		final Odometer odometer = new Odometer(leftMotor, rightMotor);
 		final Catapult catapult = new Catapult(leftMotor, rightMotor, catapultMotor, stabilizerMotor, odometer, WHEEL_RADIUS, WHEEL_RADIUS, TRACK);
-		OdometryDisplay odometryDisplay = new OdometryDisplay(odometer,t);
+		Display odometryDisplay = new Display(odometer,t);
 		
 		do {
 			// clear the display

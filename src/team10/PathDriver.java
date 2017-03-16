@@ -1,17 +1,16 @@
 package team10;
 
-/*
- * File: PathDriver.java
- * Written by: Mathieu Tougas
- * ECSE 211 - Team 10
- * Winter 2017
- * 
- * PathDriver class for Navigation
- */
-
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.SampleProvider;
+
+/**
+ * Handles the directions calculation for the robot
+ * 
+ * @author Mathieu Tougas
+ * @version 1.0
+ * 
+ */
 
 public class PathDriver {
 	private static final int FORWARD_SPEED = 200;
@@ -25,7 +24,11 @@ public class PathDriver {
 	private SampleProvider usDistance;
 	private float[] usData;
 	
-	
+	/**
+	 *  Constructor
+	 * 
+	 *  @since 1.0
+	 */
 	public PathDriver(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, Odometer odometer, SensorModes usSensor, double wheelRadius, double width) {
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
@@ -37,7 +40,12 @@ public class PathDriver {
 		usData = new float[usDistance.sampleSize()];
 		
 	}
-
+	
+	/**
+	 *  Drives to the set destinations
+	 * 
+	 *  @since 1.0
+	 */
 	public void drive(int[] destinations) {
 		// reset the motors
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
@@ -76,16 +84,30 @@ public class PathDriver {
 			travelTo(destX, destY);
 		}
 	}
-
+	
+	/**
+	 *  Converts distance in wheelturns
+	 * 
+	 *  @since 1.0
+	 */
 	private static int convertDistance(double radius, double distance) {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
 	}
 
+	/**
+	 *  Converts radians to degrees
+	 * 
+	 *  @since 1.0
+	 */
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
 	
-	// Travel to the desired point
+	/**
+	 *  Travel to the point
+	 * 
+	 *  @since 1.0
+	 */
 	private void travelTo(int x, int y){
 		// Turn to the desired angle
 		double tetha = getAngle(currentX, currentY, (double) x, (double) y);
@@ -124,7 +146,11 @@ public class PathDriver {
 		}
 	}
 	
-	// Turn to the desired angle
+	/**
+	 *  Turn to the desired angle
+	 * 
+	 *  @since 1.0
+	 */
 	private void turnTo(double tetha){
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
@@ -133,7 +159,11 @@ public class PathDriver {
 		rightMotor.rotate(-convertAngle(rightRadius, width, tetha*180/Math.PI), false);
 	}
 	
-	// Check for the position while it's moving
+	/**
+	 *  Check for the position while it's moving
+	 * 
+	 *  @since 1.0
+	 */
 	private boolean isNavigating(){
 		while (Math.abs((int) currentX - destX) > 1 || Math.abs((int) currentY - destY) > 1){
 			return true;
@@ -145,15 +175,22 @@ public class PathDriver {
 		return false;
 	}
 	
-	// Get the distance from the US sensor
+	/**
+	 * Get the distance from the US sensor
+	 * 
+	 *  @since 1.0
+	 */
 	private int getUsDistance(SampleProvider us, float[] usData){
 		us.fetchSample(usData,0);// acquire data
 		int distance=(int)(usData[0]*100.0);
 		return distance;
 	}
 	
-	
-	// Get the angle to travel. This function handles negative x values
+	/**
+	 * Get the angle to travel. This function handles negative x values
+	 * 
+	 *  @since 1.0
+	 */
 	private double getAngle(double initialX, double initialY, double finalX, double finalY){
 		double xDiff = finalX - initialX;
 		double yDiff = finalY - initialY;

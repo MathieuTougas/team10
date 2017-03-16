@@ -1,28 +1,35 @@
 package team10;
 
-/*
- * File: OdometryDisplay.java
- * Written by: Mathieu Tougas
- * ECSE 211 - Team 10
- * Winter 2017
- * 
- * Odometry display class for testing
- */
-
 import lejos.hardware.lcd.TextLCD;
 
-public class OdometryDisplay extends Thread {
+/**
+ * Handles robot display
+ * 
+ * @author Mathieu Tougas
+ * @version 1.0
+ * 
+ */
+
+public class Display extends Thread {
 	private static final long DISPLAY_PERIOD = 250;
 	private Odometer odometer;
 	private TextLCD t;
 
-	// constructor
-	public OdometryDisplay(Odometer odometer, TextLCD t) {
+	/**
+	 *  Constructor
+	 * 
+	 *  @since 1.0
+	 */
+	public Display(Odometer odometer, TextLCD t) {
 		this.odometer = odometer;
 		this.t = t;
 	}
 
-	// run method (required for Thread)
+	/**
+	 *  Thread updating the display
+	 * 
+	 *  @since 1.0
+	 */
 	public void run() {
 		long displayStart, displayEnd;
 		double[] position = new double[3];
@@ -63,6 +70,11 @@ public class OdometryDisplay extends Thread {
 		}
 	}
 	
+	/**
+	 *  Formats a double input as a string
+	 * 
+	 *  @since 1.0
+	 */
 	private static String formattedDoubleToString(double x, int places) {
 		String result = "";
 		String stack = "";

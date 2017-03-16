@@ -1,16 +1,15 @@
 package team10;
 
-/*
- * File: Catapult.java
- * Written by: Mathieu Tougas
- * ECSE 211 - Team 10
- * Winter 2017
- * 
- * Catapult class for launcher control
- */
-
 import lejos.hardware.Button;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+
+/**
+ * Handles the ball launcher
+ * 
+ * @author Mathieu Tougas
+ * @version 1.0
+ * 
+ */
 
 public class Catapult {
 	private static final int THROW_SPEED = 1500;
@@ -21,6 +20,11 @@ public class Catapult {
 	private double leftRadius, rightRadius, width;
 	public static double angle;
 	
+	/**
+	 *  Constructor
+	 * 
+	 *  @since 1.0
+	 */
 	public Catapult (EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, EV3LargeRegulatedMotor catapultMotor, EV3LargeRegulatedMotor stabilizerMotor, Odometer odometer, double leftRadius, double rightRadius, double width){
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
@@ -32,6 +36,11 @@ public class Catapult {
 		this.width = width;
 	}
 	
+	/**
+	 *  Fire the ball
+	 * 
+	 *  @since 1.0
+	 */
 	public void fire(double[][] targets) {
 		// reset the firing motors
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { catapultMotor, stabilizerMotor}) {
@@ -113,7 +122,11 @@ public class Catapult {
 		}
 	}
 	
-	// Engage the stabilizers
+	/**
+	 *  Engage the stabilizers
+	 * 
+	 *  @since 1.0
+	 */
 	void engageStabilizers(){
 		if (stabilizerActive == false) {
 		stabilizerMotor.rotate(150, true);
@@ -122,7 +135,12 @@ public class Catapult {
 		stabilizerActive = true;
 	}
 	
-	// Disengage the stabilizers
+	/**
+	 *  Disengage the stabilizers
+	 * 
+	 *  @since 1.0
+	 */
+
 	void disengageStabilizers(){
 		if (stabilizerActive == true) {
 			stabilizerMotor.rotate(-150, true);
@@ -131,22 +149,38 @@ public class Catapult {
 		stabilizerActive = false;
 	}
 	
-	// Convert distances to wheelturns
+	/**
+	 *  Convert distances to wheelturns
+	 * 
+	 *  @since 1.0
+	 */
 	private static int convertDistance(double radius, double distance) {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
 	}
 
-	// Convert angle to wheelturns
+	/**
+	 *  Convert angles to wheelturns
+	 * 
+	 *  @since 1.0
+	 */
 	private static int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
 	
-	// Get the angle
+	/**
+	 *  Get the angle to turn to
+	 * 
+	 *  @since 1.0
+	 */
 	private static double getAngle(double x, double y) {
 		return Math.atan(x/y);
 	}
 	
-	// Wait a determined amount of time
+	/**
+	 *  Wait a determined amount of time
+	 * 
+	 *  @since 1.0
+	 */
 	private static void wait(double seconds){
 		try {
 			Thread.sleep((long) (seconds*1000));
