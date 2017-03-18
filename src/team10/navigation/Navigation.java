@@ -1,6 +1,7 @@
-package team10;
+package team10.navigation;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import team10.Main;
 
 /**
  * Handles all the movement for the robot (turnTo, travelTo, flt, localize)
@@ -83,7 +84,7 @@ public class Navigation {
 	 *  Turn to desired angle, relative to xy plane
 	 *  
 	 *  @param double angle (deg)
-	 *  @param boolean stop
+	 *  @param boolean sstop
 	 *  
 	 *  @since 1.0
 	 */

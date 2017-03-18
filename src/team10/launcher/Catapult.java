@@ -1,7 +1,8 @@
-package team10;
+package team10.launcher;
 
 import lejos.hardware.Button;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import team10.navigation.Odometer;
 
 /**
  * Handles the ball launcher
@@ -141,7 +142,7 @@ public class Catapult {
 	 *  @since 1.0
 	 */
 
-	void disengageStabilizers(){
+	public void disengageStabilizers(){
 		if (stabilizerActive == true) {
 			stabilizerMotor.rotate(-150, true);
 			wait(4.0);

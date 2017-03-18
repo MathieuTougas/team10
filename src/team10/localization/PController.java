@@ -1,4 +1,4 @@
-package team10;
+package team10.localization;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 

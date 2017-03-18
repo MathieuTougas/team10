@@ -1,6 +1,7 @@
-package team10;
+package team10.navigation;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import team10.Main;
 
 /**
  * Handles odometer functions for robot

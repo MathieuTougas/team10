@@ -1,28 +1,19 @@
-package team10;
+package labs.lab5;
 
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import team10.launcher.Catapult;
-import team10.navigation.Display;
-import team10.navigation.Odometer;
 
-/**
- * Main class for robot control
- * 
- * @author Mathieu Tougas
- * @version 1.0
- * 
- */
-
-public class Main {
+public class Lab5 {
 	
 	// Static Resources:
-	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
-	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
-	public static final EV3LargeRegulatedMotor catapultMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
-	public static final EV3LargeRegulatedMotor stabilizerMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
+	// Left motor connected to output A
+	// Right motor connected to output D
+	private static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+	private static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+	private static final EV3LargeRegulatedMotor catapultMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
+	private static final EV3LargeRegulatedMotor stabilizerMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
 
 	// Constants
 	public static final double WHEEL_RADIUS = 2.1;
@@ -37,7 +28,7 @@ public class Main {
 		final TextLCD t = LocalEV3.get().getTextLCD();
 		final Odometer odometer = new Odometer(leftMotor, rightMotor);
 		final Catapult catapult = new Catapult(leftMotor, rightMotor, catapultMotor, stabilizerMotor, odometer, WHEEL_RADIUS, WHEEL_RADIUS, TRACK);
-		Display odometryDisplay = new Display (odometer,t);
+		OdometryDisplay odometryDisplay = new OdometryDisplay(odometer,t);
 		
 		do {
 			// clear the display

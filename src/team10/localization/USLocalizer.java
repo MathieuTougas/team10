@@ -1,6 +1,8 @@
-package team10;
+package team10.localization;
 
 import lejos.robotics.SampleProvider;
+import team10.navigation.Navigation;
+import team10.navigation.Odometer;
 
 /**
  * Handles the ultrasonic sensor localization routine

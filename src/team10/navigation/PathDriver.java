@@ -1,4 +1,4 @@
-package team10;
+package team10.navigation;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.sensor.SensorModes;

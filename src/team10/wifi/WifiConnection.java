@@ -1,4 +1,4 @@
-package team10;
+package team10.wifi;
 
 import java.io.BufferedReader;
 import java.io.IOException;

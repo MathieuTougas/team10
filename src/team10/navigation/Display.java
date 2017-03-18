@@ -1,6 +1,7 @@
-package team10;
+package team10.navigation;
 
 import lejos.hardware.lcd.TextLCD;
+import team10.launcher.Catapult;
 
 /**
  * Handles robot display
