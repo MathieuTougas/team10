@@ -17,6 +17,7 @@ public class Navigation {
 	public static final int FORWARD_SPEED = 200;
 	public static final int ROTATE_SPEED = 100;
 	private static final int ACCELERATION = 1000;
+	final static double DEG_ERR = 1, CM_ERR = 1.0;
 	final static double DEGREE_ERR = 1;
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
 	private Odometer odometer;
@@ -144,7 +145,7 @@ public class Navigation {
 	 * 
 	 *  @since 1.0
 	 */
-	public void travelTo(double x, double y){
+	public void travelTo(int x, int y){
 		// Turn to the desired angle
 		double tetha = getAngle(currentX, currentY, x, y);
 		tetha += odometer.getTheta();
@@ -180,6 +181,18 @@ public class Navigation {
 			leftMotor.rotate(convertDistance(leftRadius, 20), true);
 			rightMotor.rotate(convertDistance(rightRadius, 20), false);
 		}
+	}
+	
+	public void travelTo(double x, double y) {
+		double minAng;
+		while (Math.abs(x - odometer.getX()) > CM_ERR || Math.abs(y - odometer.getY()) > CM_ERR) {
+			minAng = (Math.atan2(y - odometer.getY(), x - odometer.getX())) * (180.0 / Math.PI);
+			if (minAng < 0)
+				minAng += 360.0;
+			this.turnTo(minAng, false);
+			this.setSpeeds(FORWARD_SPEED, FORWARD_SPEED);
+		}
+		this.setSpeeds(0, 0);
 	}
 	
 	/**
