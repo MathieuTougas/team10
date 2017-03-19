@@ -46,7 +46,7 @@ public class LightLocalizer {
 		// Get the x-axis value for the line, back up to original position
 		runUntilLine();
 		locX = odometer.getX();
-		backOff(0, 'x');
+		backOff(0, 'y');
 		
 		// Turn to 90 and run
 		navigation.turnTo(90, true);
@@ -69,7 +69,7 @@ public class LightLocalizer {
 	 *  @since 1.0
 	 */
 	private void runUntilLine(){
-		navigation.setSpeeds(50,50);
+		navigation.setSpeeds(Navigation.FORWARD_SPEED,Navigation.FORWARD_SPEED);
 		color = getColorData();
 		
 		while (color > BLACK_LINE){
@@ -84,14 +84,14 @@ public class LightLocalizer {
 	 *  @since 1.0
 	 */
 	private void backOff(int point, char axis){
-		navigation.setSpeeds(-50,-50);
+		navigation.setSpeeds(-Navigation.FORWARD_SPEED,-Navigation.FORWARD_SPEED);
 		if (axis == 'x'){
 			double location = odometer.getX();
 			while ((int) location != point){
 				location = odometer.getX();
 			}
 		}
-		else if (axis == 'x'){
+		else if (axis == 'y'){
 			double location = odometer.getY();
 			while ((int) location != point){
 				location = odometer.getY();

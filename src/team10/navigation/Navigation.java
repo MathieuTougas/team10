@@ -14,8 +14,8 @@ import team10.Main;
  */
 
 public class Navigation {
-	private static final int FORWARD_SPEED = 200;
-	private static final int ROTATE_SPEED = 100;
+	public static final int FORWARD_SPEED = 200;
+	public static final int ROTATE_SPEED = 100;
 	private static final int ACCELERATION = 1000;
 	final static double DEGREE_ERR = 1;
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
@@ -183,7 +183,7 @@ public class Navigation {
 	}
 	
 	/**
-	 *  Turn to the desired angle
+	 *  Turn to the desired angle (rads)
 	 * 
 	 *  @since 1.0
 	 */
@@ -204,11 +204,11 @@ public class Navigation {
 	 *  @since 1.0
 	 */
 	public void turnTo(double angle, boolean stop) {
-		double error = angle - this.odometer.getTheta();
+		double error = angle - this.odometer.getTheta(true);
 
 		while (Math.abs(error) > DEGREE_ERR) {
 
-			error = angle - this.odometer.getTheta();
+			error = angle - this.odometer.getTheta(true);
 
 			if (error < -180.0) {
 				this.setSpeeds(-ROTATE_SPEED, ROTATE_SPEED);
