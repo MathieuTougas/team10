@@ -63,7 +63,7 @@ public class USLocalizer {
 			// keep rotating until the robot sees a wall, then latch the angle
 			turnUntilWall();
 			navigation.setSpeeds(0,0);
-			angleA = odo.getTheta();
+			angleA = odo.getTheta()*180/Math.PI;
 			
 			// switch direction and wait until it sees no wall
 			navigation.setSpeeds(-ROTATION_SPEED,ROTATION_SPEED);
@@ -72,14 +72,15 @@ public class USLocalizer {
 			// keep rotating until the robot sees a wall, then latch the angle
 			turnUntilWall();
 			navigation.setSpeeds(0,0);
-			angleB = odo.getTheta();
+			angleB = odo.getTheta()*180/Math.PI;
 			
 			// get theta, turn to it and update position
 			theta = getStartingAngle(angleA, angleB);
 			
 			theta = -theta;
 			if(theta <= 0) {
-				theta = theta +360;}
+				theta = theta +360;
+			}
 			
 			navigation.turnTo(theta, true);
 			//odo.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
