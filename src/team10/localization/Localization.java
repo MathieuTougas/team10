@@ -1,8 +1,5 @@
 package team10.localization;
 
-import lejos.hardware.Button;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
@@ -32,6 +29,7 @@ public class Localization {
 		float[] usData = new float[usValue.sampleSize()];
 		
 		// Setup color sensor
+		@SuppressWarnings("resource")
 		SensorModes colorSensor = new EV3ColorSensor(colorPort);
 		SampleProvider colorValue = colorSensor.getMode("Red");
 		float[] colorData = new float[colorValue.sampleSize()];

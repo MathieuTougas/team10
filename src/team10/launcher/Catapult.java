@@ -1,7 +1,6 @@
 package team10.launcher;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import team10.navigation.Odometer;
 
 /**
  * Handles the ball launcher
@@ -16,8 +15,6 @@ public class Catapult {
 	private static final int POSITION_SPEED = 50;
 	private static boolean stabilizerActive;
 	private EV3LargeRegulatedMotor stabilizerMotor, catapultMotor;
-	private Odometer odometer;
-	private double wheelRadius, width;
 	public static double angle;
 	
 	/**
