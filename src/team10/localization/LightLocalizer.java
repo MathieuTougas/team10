@@ -13,7 +13,7 @@ import team10.navigation.Odometer;
  */
 
 public class LightLocalizer {
-	private Odometer odo;
+	private Odometer odometer;
 	private SampleProvider colorSensor;
 	private final double BLACK_LINE = 40.0;
 	public static float color;
@@ -26,11 +26,11 @@ public class LightLocalizer {
 	 * 
 	 *  @since 1.0
 	 */
-	public LightLocalizer(Odometer odo, SampleProvider colorSensor, float[] colorData) {
-		this.odo = odo;
+	public LightLocalizer(Odometer odometer, SampleProvider colorSensor, float[] colorData) {
+		this.odometer = odometer;
 		this.colorSensor = colorSensor;
 		this.colorData = colorData;
-		navigation = new Navigation (odo);
+		navigation = new Navigation (odometer);
 	}
 	
 	/**
@@ -39,28 +39,28 @@ public class LightLocalizer {
 	 *  @since 1.0
 	 */
 	public void doLocalization() {
-		odo.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
+		odometer.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
 		locX = 0;
 		locY = 0;
 		
 		// Get the x-axis value for the line, back up to original position
 		runUntilLine();
-		locX = odo.getX();
-		backOff(0, 'x');
+		locX = odometer.getX();
+		backOff(0, 'y');
 		
 		// Turn to 90 and run
 		navigation.turnTo(90, true);
 		
 		// Get the y-axis value for the line
 		runUntilLine();
-		locY = odo.getY();
+		locY = odometer.getY();
 		
 		// Travel to the zero-zero point
 		navigation.travelTo(locX-15, locY-15);
 		navigation.turnTo(0, true);
 		
 		// Sets the odometer to (0,0);
-		odo.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
+		odometer.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class LightLocalizer {
 	 *  @since 1.0
 	 */
 	private void runUntilLine(){
-		navigation.setSpeeds(50,50);
+		navigation.setSpeeds(Navigation.FORWARD_SPEED,Navigation.FORWARD_SPEED);
 		color = getColorData();
 		
 		while (color > BLACK_LINE){
@@ -84,17 +84,17 @@ public class LightLocalizer {
 	 *  @since 1.0
 	 */
 	private void backOff(int point, char axis){
-		navigation.setSpeeds(-50,-50);
+		navigation.setSpeeds(-Navigation.FORWARD_SPEED,-Navigation.FORWARD_SPEED);
 		if (axis == 'x'){
-			double location = odo.getX();
+			double location = odometer.getX();
 			while ((int) location != point){
-				location = odo.getX();
+				location = odometer.getX();
 			}
 		}
-		else if (axis == 'x'){
-			double location = odo.getY();
+		else if (axis == 'y'){
+			double location = odometer.getY();
 			while ((int) location != point){
-				location = odo.getY();
+				location = odometer.getY();
 			}
 		}
 		else {

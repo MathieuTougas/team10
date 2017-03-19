@@ -158,6 +158,19 @@ public class Odometer extends Thread {
 
 		return result;
 	}
+	
+	public double getTheta(boolean degrees) {
+		double result;
+
+		synchronized (lock) {
+			result = theta;
+		}
+		
+		if (degrees == true)
+			result = result*180/Math.PI;
+
+		return result;
+	}
 
 	/**
 	 *  Mutator

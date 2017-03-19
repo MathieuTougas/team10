@@ -8,7 +8,7 @@ import lejos.robotics.SampleProvider;
 import team10.navigation.Odometer;
 
 public class Localization {
-	private static final USLocalizer.LocalizationType localization_type= USLocalizer.LocalizationType.FALLING_EDGE;
+	private static final USLocalizer.LocalizationType localization_type = USLocalizer.LocalizationType.FALLING_EDGE;
 	private static Port usPort;		
 	private static Port colorPort;
 	private Odometer odometer;
