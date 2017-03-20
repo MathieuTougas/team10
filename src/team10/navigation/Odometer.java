@@ -205,6 +205,14 @@ public class Odometer extends Thread {
 			this.theta = theta;
 		}
 	}
+	/**
+	 * @return angle in radians
+	 */
+	public static double getRadAngle(double degrees) {
+		return degrees*Math.PI/180;
+	}
+	
+	
 
 	/**
 	 * @return the leftMotorTachoCount

@@ -62,6 +62,7 @@ public class LightLocalizer {
 		
 		// Travel to the zero-zero point
 		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET);
+		navigation.waitTillCompleted();
 		navigation.turnTo(0, true);
 		
 		// Sets the odometer to (0,0);

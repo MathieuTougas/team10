@@ -28,7 +28,7 @@ public class Main {
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
 	
 	// NAVIGATION
-	private static final double [][] CORNERS = {{-0.0, 0.0, 0.0},{10.0, 0.0, 0.0}, {10.0, 10.0, 0.0}, {0.0, 10.0, 0.0}};
+	private static final double [][] CORNERS = {{-0.0, 0.0, Odometer.getRadAngle(90.0)},{10.0, 0.0, Odometer.getRadAngle(0.0)}, {10.0, 10.0, Odometer.getRadAngle(270.0)}, {0.0, 10.0, Odometer.getRadAngle(180.0)}};
 	
 	private static Map data;
 

@@ -263,6 +263,16 @@ public class Navigation {
 	}
 	
 	/**
+	 * Get the angle to travel. This function handles negative x values
+	 * 
+	 *  @since 1.0
+	 */
+	public void waitTillCompleted(){
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.waitComplete();
+		}
+	}
+	/**
 	 * Get the distance from the US sensor
 	 * 
 	 *  @since 1.0
