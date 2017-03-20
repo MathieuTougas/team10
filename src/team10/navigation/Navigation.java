@@ -1,7 +1,6 @@
 package team10.navigation;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.SampleProvider;
 import team10.Main;
 
