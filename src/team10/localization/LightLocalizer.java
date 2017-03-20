@@ -17,7 +17,8 @@ public class LightLocalizer {
 	private SampleProvider colorSensor;
 	private final double BLACK_LINE = 40.0;
 	public static float color;
-	public double locX, locY;
+	public static double locX;
+	public static double locY;
 	private float[] colorData;	
 	private Navigation navigation;
 	
