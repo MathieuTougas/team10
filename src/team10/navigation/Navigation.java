@@ -13,7 +13,7 @@ import lejos.robotics.SampleProvider;
 
 public class Navigation {
 	public static final int FORWARD_SPEED = 200;
-	public static final int ROTATE_SPEED = 100;
+	public static final int ROTATE_SPEED = 200;
 	private static final int ACCELERATION = 1000;
 	final static double DEG_ERR = 1, CM_ERR = 1.0;
 	final static double DEGREE_ERR = 1;
@@ -36,8 +36,8 @@ public class Navigation {
 		this.odometer = odometer;
 		this.wheelRadius = Odometer.WHEEL_RADIUS;
 		this.width = Odometer.WHEEL_BASE;
-		//usDistance = usSensor.getMode("Distance");
-		//usData = new float[usDistance.sampleSize()];
+		//this.usDistance = Localization.usSensor.getMode("Distance");
+		//this.usData = new float[usDistance.sampleSize()];
 		
 	}
 	
@@ -180,6 +180,25 @@ public class Navigation {
 		}
 	}
 	
+	public void travelTo(double x, double y, boolean other){
+		// Turn to the desired angle
+		double tetha = getAngle(currentX, currentY, x, y);
+		tetha += odometer.getTheta();
+		turnTo(tetha);
+		
+		// Set the motors speed forward
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		leftMotor.forward();
+		rightMotor.forward();
+		
+		// While it is navigating, update odometer and US distance
+		while (isNavigating()){
+			currentX = odometer.getX();
+			currentY = odometer.getY();
+		}
+	}
+	
 	public void travelTo(double x, double y) {
 		double minAng;
 		while (Math.abs(x - odometer.getX()) > CM_ERR || Math.abs(y - odometer.getY()) > CM_ERR) {
@@ -187,7 +206,7 @@ public class Navigation {
 			if (minAng < 0)
 				minAng += 360.0;
 			this.turnTo(minAng, false);
-			this.setSpeeds(FORWARD_SPEED, FORWARD_SPEED);
+			this.setSpeeds(ROTATE_SPEED, ROTATE_SPEED);
 		}
 		this.setSpeeds(0, 0);
 	}

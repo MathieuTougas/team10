@@ -76,12 +76,44 @@ public class Main {
 			String disp_orientation = (String) data.get("omega");
 			double [] initialPosition = CORNERS[fwd_corner-1];
 			
+			int xDest = disp_x;
+			int yDest = disp_y;
 			
-
+			
+			// Start odometry
 			odometer.start();
 			lcdDisplay.start();
 			
+			// Do localization
 			localization.doLocalization(initialPosition);
+			
+			// Go to Ball dispenser
+			switch (disp_orientation){
+			case "N":
+				yDest += 1;
+				break;
+			case "E":
+				yDest += 1;
+				break;
+			case "S":
+				yDest -= 1;
+				break;
+			case "W":
+				yDest -= 1;
+				break;	
+			}
+			
+			// Go in front of the ball dispenser
+			navigation.travelTo(xDest, yDest);
+			
+			// Go to the ball dispenser
+			navigation.travelTo(disp_x, disp_y);
+			
+			// Wait
+			wait(1.0);
+			
+			// Go to the ball dispenser
+			navigation.travelTo(5, fwd_line);
 			
 			// spawn a new Thread
 			(new Thread() {
@@ -109,5 +141,18 @@ public class Main {
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
 		catapult.disengageStabilizers();
 		System.exit(0);
+	}
+	
+	/**
+	 *  Wait a determined amount of time
+	 * 
+	 *  @since 1.0
+	 */
+	private static void wait(double seconds){
+		try {
+			Thread.sleep((long) (seconds*1000));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

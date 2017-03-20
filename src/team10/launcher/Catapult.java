@@ -88,7 +88,6 @@ public class Catapult {
 		stabilizerActive = false;
 	}
 	
-	
 	/**
 	 *  Wait a determined amount of time
 	 * 
