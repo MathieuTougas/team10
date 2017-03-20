@@ -1,7 +1,8 @@
 package team10.navigation;
 
+import team10.localization.LightLocalizer;
+import team10.localization.USLocalizer;
 import lejos.hardware.lcd.TextLCD;
-import team10.launcher.Catapult;
 
 /**
  * Handles robot display
@@ -14,16 +15,16 @@ import team10.launcher.Catapult;
 public class Display extends Thread {
 	private static final long DISPLAY_PERIOD = 250;
 	private Odometer odometer;
-	private TextLCD t;
+	private TextLCD lcd;
 
 	/**
 	 *  Constructor
 	 * 
 	 *  @since 1.0
 	 */
-	public Display(Odometer odometer, TextLCD t) {
+	public Display(Odometer odometer, TextLCD lcd) {
 		this.odometer = odometer;
-		this.t = t;
+		this.lcd = lcd;
 	}
 
 	/**
@@ -36,26 +37,39 @@ public class Display extends Thread {
 		double[] position = new double[3];
 
 		// clear the display once
-		t.clear();
+		lcd.clear();
 
 		while (true) {
 			displayStart = System.currentTimeMillis();
 
-			// clear the lines for displaying odometry information
-			t.drawString("X:              ", 0, 0);
-			t.drawString("Y:              ", 0, 1);
-			t.drawString("T:              ", 0, 2);
-			t.drawString("A:              ", 0, 3);
-
 			// get the odometry information
 			odometer.getPosition(position, new boolean[] { true, true, true });
+			
 
-			// display odometry information
-			for (int i = 0; i < 3; i++) {
-				t.drawString(formattedDoubleToString(position[i], 2), 3, i);
-			}
-			// Print the latest reading from the color sensor
-			t.drawString(formattedDoubleToString(Catapult.angle, 2), 3, 3);
+			
+			lcd.drawString("Data", 0, 0);
+			lcd.drawString("X: ", 0, 1);
+			lcd.drawString("Y: ", 0, 2);
+			lcd.drawString("TH: ", 0, 3);
+			lcd.drawString("Calc", 0, 4);
+			lcd.drawString("A: ", 0, 5);
+			lcd.drawString("B: ", 0, 6);
+			lcd.drawString("T: ", 0, 7);
+			lcd.drawString("Sensors", 8, 0);
+			lcd.drawString("Us: ", 8, 1);
+			lcd.drawString("Cs: ", 8, 2);
+			lcd.drawString("CalX: ", 8, 3);
+			lcd.drawString("CalY: ", 8, 4);
+			lcd.drawInt((int)(position[0] * 10), 3, 1);
+			lcd.drawInt((int)(position[1] * 10), 3, 2);
+			lcd.drawString(formattedDoubleToString(position[2], 2), 3, 3);
+			lcd.drawString(formattedDoubleToString(USLocalizer.angleA, 2), 3, 5);
+			lcd.drawString(formattedDoubleToString(USLocalizer.angleB, 2), 3, 6);
+			lcd.drawInt((int)USLocalizer.theta, 3, 7);
+			lcd.drawInt((int)USLocalizer.distance, 15, 1);
+			lcd.drawInt((int)LightLocalizer.color, 15, 2);
+			lcd.drawInt((int)LightLocalizer.locX, 15, 3);
+			lcd.drawInt((int)LightLocalizer.locY, 15, 4);
 
 			// throttle the OdometryDisplay
 			displayEnd = System.currentTimeMillis();
