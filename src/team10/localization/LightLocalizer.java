@@ -69,6 +69,37 @@ public class LightLocalizer {
 	}
 	
 	/**
+	 *  Do the localization routine, overriding with initial position
+	 * 
+	 *  @param initialPosition (x, y, theta)
+	 *  @since 1.0
+	 */
+	public void doLocalization(double[] initialPosition) {
+		odometer.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
+		locX = 0;
+		locY = 0;
+		
+		// Get the x-axis value for the line, back up to original position
+		runUntilLine();
+		locX = odometer.getX();
+		backOff(0, 'y');
+		
+		// Turn to 90 and run
+		navigation.turnTo(90, true);
+		
+		// Get the y-axis value for the line
+		runUntilLine();
+		locY = odometer.getY();
+		
+		// Travel to the zero-zero point
+		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET);
+		navigation.turnTo(0, true);
+		
+		// Sets the odometer to (0,0);
+		odometer.setPosition(initialPosition, new boolean [] {true, true, true});
+	}
+	
+	/**
 	 *  Run the robot forward until it reaches a line
 	 * 
 	 *  @since 1.0

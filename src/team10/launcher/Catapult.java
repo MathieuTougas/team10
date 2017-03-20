@@ -32,15 +32,15 @@ public class Catapult {
 	 * 
 	 *  @since 1.0
 	 */
-	public void fire(double[][] targets) {
+	public void fire() {
 		// reset the firing motors
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { catapultMotor, stabilizerMotor}) {
 			motor.stop();
 			motor.setAcceleration(6000);
 		}
 
-		// wait 5 seconds
-		wait(3.0);
+		// wait
+		wait(1.0);
 		
 		stabilizerMotor.setSpeed(POSITION_SPEED);
 		stabilizerActive = false;
@@ -54,7 +54,7 @@ public class Catapult {
 		catapultMotor.rotate(150, true);
 		
 		// Relace the catapult arm
-		wait(3.0);
+		wait(1.0);
 		catapultMotor.setSpeed(POSITION_SPEED);
 		catapultMotor.rotate(-150, true);
 		

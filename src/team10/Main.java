@@ -28,7 +28,7 @@ public class Main {
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
 	
 	// NAVIGATION
-	private static final double [][] TARGETS = {{-30.0, 90.0},{0, 90.0}, {30.0, 90.0}};
+	private static final double [][] CORNERS = {{-0.0, 0.0, 0.0},{10.0, 0.0, 0.0}, {10.0, 10.0, 0.0}, {0.0, 10.0, 0.0}};
 	
 	private static Map data;
 
@@ -74,15 +74,23 @@ public class Main {
 			int disp_x = ((Long) data.get("bx")).intValue();
 			int disp_y = ((Long) data.get("by")).intValue();
 			String disp_orientation = (String) data.get("omega");
+			double [] initialPosition = CORNERS[fwd_corner-1];
 			
 			
 
 			odometer.start();
 			lcdDisplay.start();
 			
-			localization.doLocalization();
+			localization.doLocalization(initialPosition);
 			
-		} 
+			// spawn a new Thread
+			(new Thread() {
+				public void run() {
+					// Fire the catapult
+					catapult.fire();
+				}
+			}).start();
+		}
 		
 		// Defender
 		else if (defTeam == 10){
@@ -90,19 +98,13 @@ public class Main {
 			int def_corner = ((Long) data.get("DEF_CORNER")).intValue();
 			int def_zone_x = ((Long) data.get("w1")).intValue();
 			int def_zone_y = ((Long) data.get("w2")).intValue();
+			double [] initialPosition = CORNERS[def_corner-1];
 
 			
 			odometer.start();
 			lcdDisplay.start();
 
-			// spawn a new Thread
-			(new Thread() {
-				public void run() {
-					// Fire the catapult
-					catapult.fire(TARGETS);
-				}
-			}).start();
-		}
+		} 
 		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
 		catapult.disengageStabilizers();
