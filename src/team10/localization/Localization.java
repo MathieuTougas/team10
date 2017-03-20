@@ -9,8 +9,8 @@ import lejos.robotics.SampleProvider;
 import team10.navigation.Odometer;
 
 public class Localization {
-	private static final Port usPort = LocalEV3.get().getPort("S1");		
-	private static final Port colorPort = LocalEV3.get().getPort("S2");	
+	private static final Port usPort = LocalEV3.get().getPort("S4");		
+	private static final Port colorPort = LocalEV3.get().getPort("S3");	
 	private static final USLocalizer.LocalizationType localization_type = USLocalizer.LocalizationType.FALLING_EDGE;
 	private Odometer odometer;
 	
