@@ -14,7 +14,6 @@ import team10.navigation.Odometer;
 
 public class USLocalizer {
 	public enum LocalizationType { FALLING_EDGE, RISING_EDGE };
-	public static float ROTATION_SPEED = 50;
 	public static float distance;
 	public static double angleA, angleB, theta;
 	private final int BANDWIDTH = 5;
@@ -23,8 +22,8 @@ public class USLocalizer {
 	private SampleProvider usSensor;
 	private float[] usData;
 	private LocalizationType locType;
-	float bandCenter = 50;
-	float distError;
+	private float bandCenter = 50;
+    private float distError, turnSpeed;
 	
 	/**
 	 * Constructor method
@@ -36,6 +35,7 @@ public class USLocalizer {
 		this.usSensor = usSensor;
 		this.usData = usData;
 	    this.locType = locType;
+	    this.turnSpeed = Navigation.ROTATE_SPEED;
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class USLocalizer {
 		
 		if (locType == LocalizationType.FALLING_EDGE) {
 			Navigation navigation = new Navigation (odo);
-			navigation.setSpeeds(ROTATION_SPEED,-ROTATION_SPEED);
+			navigation.setSpeeds(turnSpeed,-turnSpeed);
 
 			// rotate the robot until it sees no wall
 			distance = getFilteredData();
@@ -58,7 +58,7 @@ public class USLocalizer {
 			if (distError > BANDWIDTH) {
 				navigation.turnAng(-45,true);
 			}
-			navigation.setSpeeds(ROTATION_SPEED,-ROTATION_SPEED);
+			navigation.setSpeeds(turnSpeed,-turnSpeed);
 			turnUntilNoWall();
 			// keep rotating until the robot sees a wall, then latch the angle
 			turnUntilWall();
@@ -66,7 +66,7 @@ public class USLocalizer {
 			angleA = odo.getTheta()*180/Math.PI;
 			
 			// switch direction and wait until it sees no wall
-			navigation.setSpeeds(-ROTATION_SPEED,ROTATION_SPEED);
+			navigation.setSpeeds(-turnSpeed,turnSpeed);
 			turnUntilNoWall();
 			
 			// keep rotating until the robot sees a wall, then latch the angle
@@ -90,7 +90,7 @@ public class USLocalizer {
 			
 		} else {
 			Navigation navigation = new Navigation (odo);
-			navigation.setSpeeds(ROTATION_SPEED,-ROTATION_SPEED);
+			navigation.setSpeeds(turnSpeed,-turnSpeed);
 			
 			// Rotate until it's on a wall
 			turnUntilWall();
@@ -106,7 +106,7 @@ public class USLocalizer {
 			navigation.turnAng(45,true);
 			
 			// Turn until it does'nt see the wall anymore
-			navigation.setSpeeds(-ROTATION_SPEED,ROTATION_SPEED);
+			navigation.setSpeeds(-turnSpeed,turnSpeed);
 			turnUntilNoWall();
 			
 			// Stop the robot, get the second angle

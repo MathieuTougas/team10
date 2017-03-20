@@ -1,7 +1,7 @@
 package team10.navigation;
 
+import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import team10.Main;
 
 /**
  * Handles odometer functions for robot
@@ -12,13 +12,16 @@ import team10.Main;
  */
 
 public class Odometer extends Thread {
+	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 	// robot position
 	private double x, y, theta;
 	private int leftMotorTachoCount, rightMotorTachoCount;
-	private EV3LargeRegulatedMotor leftMotor, rightMotor;
-	private double wheelRadius, wheelBase;
-	// odometer update period, in ms
+	// Static ressources
+	public static final double WHEEL_RADIUS = 2.1;
+	public static final double WHEEL_BASE = 13.4;
 	private static final long ODOMETER_PERIOD = 25;
+	
 
 	// lock object for mutual exclusion
 	private Object lock;
@@ -28,16 +31,12 @@ public class Odometer extends Thread {
 	 * 
 	 *  @since 1.0
 	 */
-	public Odometer(EV3LargeRegulatedMotor leftMotor,EV3LargeRegulatedMotor rightMotor) {
-		this.leftMotor = leftMotor;
-		this.rightMotor = rightMotor;
+	public Odometer() {
 		this.x = 0.0;
 		this.y = 0.0;
 		this.theta = 0.0;
 		this.leftMotorTachoCount = 0;
 		this.rightMotorTachoCount = 0;
-		this.wheelBase = Main.TRACK;
-		this.wheelRadius = Main.WHEEL_RADIUS;
 		lock = new Object();
 	}
 
@@ -61,12 +60,12 @@ public class Odometer extends Thread {
 			int leftTachoDiff = (leftTacho - getLeftMotorTachoCount())*1000;
 			
 			// Calculate the distance covered by mutliplying the tacho count difference by the wheel radius and the angle covered. Division by 1000
-			double rightDist = rightTachoDiff*(Math.PI/180)*wheelRadius/1000;
-			double leftDist = leftTachoDiff*(Math.PI/180)*wheelRadius/1000;
+			double rightDist = rightTachoDiff*(Math.PI/180)*WHEEL_RADIUS/1000;
+			double leftDist = leftTachoDiff*(Math.PI/180)*WHEEL_RADIUS/1000;
 			double totalDist = (rightDist + leftDist)/2;
 			
 			// Calculate the angle by substracting the right from the left distance covered
-			double thetaAngle = (rightDist - leftDist)/wheelBase;
+			double thetaAngle = (rightDist - leftDist)/WHEEL_BASE;
 			
 			// Set tacho count for the motors
 			setLeftMotorTachoCount(leftTacho);

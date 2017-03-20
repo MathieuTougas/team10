@@ -22,24 +22,10 @@ import team10.wifi.WifiConnection;
  */
 
 public class Main {
-	
-	// Static Resources:
-	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
-	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
-	public static final EV3LargeRegulatedMotor catapultMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
-	public static final EV3LargeRegulatedMotor stabilizerMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
-	private static final Port usPort = LocalEV3.get().getPort("S1");		
-	private static final Port colorPort = LocalEV3.get().getPort("S2");	
-	private static final TextLCD lcdDisplay = LocalEV3.get().getTextLCD();
-
 	// WIFI
 	private static final String SERVER_IP = "192.168.2.38";
 	private static final int TEAM_NUMBER = 10;
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
-	
-	// ODOMETRY
-	public static final double WHEEL_RADIUS = 2.1;
-	public static final double TRACK = 13.4;
 	
 	// NAVIGATION
 	private static final double [][] TARGETS = {{-30.0, 90.0},{0, 90.0}, {30.0, 90.0}};
@@ -52,11 +38,11 @@ public class Main {
 
 		// Instantiate objects
 		final WifiConnection conn = new WifiConnection(SERVER_IP, TEAM_NUMBER, ENABLE_DEBUG_WIFI_PRINT);
-		final Odometer odometer = new Odometer(leftMotor, rightMotor);
-		final Catapult catapult = new Catapult(catapultMotor, stabilizerMotor);
-		final Localization localization = new Localization (usPort, colorPort, odometer);
+		final Odometer odometer = new Odometer();
+		final Catapult catapult = new Catapult();
+		final Localization localization = new Localization (odometer);
 		final Navigation navigation = new Navigation(odometer);
-		final Display odometryDisplay = new Display (odometer, lcdDisplay);
+		final Display lcdDisplay = new Display (odometer);
 		
 		
 		// Get data
@@ -92,7 +78,7 @@ public class Main {
 			
 
 			odometer.start();
-			odometryDisplay.start();
+			lcdDisplay.start();
 			
 			localization.doLocalization();
 			
@@ -107,7 +93,7 @@ public class Main {
 
 			
 			odometer.start();
-			odometryDisplay.start();
+			lcdDisplay.start();
 
 			// spawn a new Thread
 			(new Thread() {

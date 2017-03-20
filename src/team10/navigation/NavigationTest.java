@@ -24,9 +24,8 @@ public class NavigationTest {
 	 */
 	public NavigationTest (Odometer odo) {
 		this.odometer = odo;
-
-		this.leftMotor = Main.leftMotor;
-		this.rightMotor = Main.rightMotor;
+		this.leftMotor = Odometer.leftMotor;
+		this.rightMotor = Odometer.rightMotor;
 
 		// set acceleration
 		this.leftMotor.setAcceleration(ACCELERATION);
@@ -123,8 +122,8 @@ public class NavigationTest {
 			leftMotor.setSpeed(SLOW);
 			rightMotor.setSpeed(SLOW);
 			
-			leftMotor.rotate(-convertAngle(Main.WHEEL_RADIUS, Main.TRACK, angle), true);
-			rightMotor.rotate(convertAngle(Main.WHEEL_RADIUS, Main.TRACK, angle), false);
+			leftMotor.rotate(-convertAngle(Odometer.WHEEL_RADIUS, Odometer.WHEEL_BASE, angle), true);
+			rightMotor.rotate(convertAngle(Odometer.WHEEL_RADIUS, Odometer.WHEEL_BASE, angle), false);
 	}
 	
 	/**

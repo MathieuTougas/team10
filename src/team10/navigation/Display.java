@@ -2,29 +2,29 @@ package team10.navigation;
 
 import team10.localization.LightLocalizer;
 import team10.localization.USLocalizer;
+import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 
 /**
  * Handles robot display
  * 
  * @author Mathieu Tougas
- * @version 1.0
+ * @version 1.1
  * 
  */
 
 public class Display extends Thread {
+	private static final TextLCD lcd = LocalEV3.get().getTextLCD();
 	private static final long DISPLAY_PERIOD = 250;
 	private Odometer odometer;
-	private TextLCD lcd;
 
 	/**
 	 *  Constructor
 	 * 
 	 *  @since 1.0
 	 */
-	public Display(Odometer odometer, TextLCD lcd) {
+	public Display(Odometer odometer) {
 		this.odometer = odometer;
-		this.lcd = lcd;
 	}
 
 	/**
@@ -130,5 +130,16 @@ public class Display extends Thread {
 		
 		return result;
 	}
+	
+	/**
+	 *  Clears the display
+	 * 
+	 *  @since 1.1
+	 */
+	public void clear() {
+		lcd.clear();
+		
+	}
+
 
 }

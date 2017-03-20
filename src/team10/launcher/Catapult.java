@@ -1,5 +1,6 @@
 package team10.launcher;
 
+import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
 /**
@@ -11,10 +12,11 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
  */
 
 public class Catapult {
+	public static final EV3LargeRegulatedMotor catapultMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
+	public static final EV3LargeRegulatedMotor stabilizerMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
 	private static final int THROW_SPEED = 1500;
 	private static final int POSITION_SPEED = 50;
 	private static boolean stabilizerActive;
-	private EV3LargeRegulatedMotor stabilizerMotor, catapultMotor;
 	public static double angle;
 	
 	/**
@@ -22,9 +24,7 @@ public class Catapult {
 	 * 
 	 *  @since 1.0
 	 */
-	public Catapult (EV3LargeRegulatedMotor catapultMotor, EV3LargeRegulatedMotor stabilizerMotor){
-		this.catapultMotor = catapultMotor;
-		this.stabilizerMotor = stabilizerMotor;
+	public Catapult (){
 	}
 	
 	/**

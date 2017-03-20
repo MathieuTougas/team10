@@ -2,7 +2,6 @@ package team10.navigation;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.robotics.SampleProvider;
-import team10.Main;
 
 /**
  * Handles the directions calculation for the robot
@@ -21,7 +20,7 @@ public class Navigation {
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
 	private Odometer odometer;
 	static int destX, destY, distW;
-	private double currentX, currentY, leftRadius, rightRadius, width;
+	private double currentX, currentY, wheelRadius, width;
 	private boolean onPoint;
 	private SampleProvider usDistance;
 	private float[] usData;
@@ -32,12 +31,11 @@ public class Navigation {
 	 *  @since 1.0
 	 */
 	public Navigation (Odometer odometer) {
-		this.leftMotor = Main.leftMotor;
-		this.rightMotor = Main.rightMotor;
+		this.leftMotor = Odometer.leftMotor;
+		this.rightMotor = Odometer.rightMotor;
 		this.odometer = odometer;
-		this.leftRadius = Main.WHEEL_RADIUS;
-		this.rightRadius = Main.WHEEL_RADIUS;
-		this.width = Main.TRACK;
+		this.wheelRadius = Odometer.WHEEL_RADIUS;
+		this.width = Odometer.WHEEL_BASE;
 		//usDistance = usSensor.getMode("Distance");
 		//usData = new float[usDistance.sampleSize()];
 		
@@ -117,8 +115,8 @@ public class Navigation {
 			leftMotor.setSpeed(ROTATE_SPEED);
 			rightMotor.setSpeed(ROTATE_SPEED);
 			
-			leftMotor.rotate(-convertAngle(Main.WHEEL_RADIUS, Main.TRACK, angle), true);
-			rightMotor.rotate(convertAngle(Main.WHEEL_RADIUS, Main.TRACK, angle), false);
+			leftMotor.rotate(-convertAngle(wheelRadius, width, angle), true);
+			rightMotor.rotate(convertAngle(wheelRadius, width, angle), false);
 	}
 	
 	/**
@@ -177,8 +175,8 @@ public class Navigation {
 		if (wF == true){
 			leftMotor.setSpeed(FORWARD_SPEED);
 			rightMotor.setSpeed(FORWARD_SPEED);
-			leftMotor.rotate(convertDistance(leftRadius, 20), true);
-			rightMotor.rotate(convertDistance(rightRadius, 20), false);
+			leftMotor.rotate(convertDistance(wheelRadius, 20), true);
+			rightMotor.rotate(convertDistance(wheelRadius, 20), false);
 		}
 	}
 	
@@ -203,8 +201,8 @@ public class Navigation {
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
 		
-		leftMotor.rotate(convertAngle(leftRadius, width, tetha*180/Math.PI), true);
-		rightMotor.rotate(-convertAngle(rightRadius, width, tetha*180/Math.PI), false);
+		leftMotor.rotate(convertAngle(wheelRadius, width, tetha*180/Math.PI), true);
+		rightMotor.rotate(-convertAngle(wheelRadius, width, tetha*180/Math.PI), false);
 	}
 	
 	/**

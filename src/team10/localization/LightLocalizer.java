@@ -16,11 +16,13 @@ public class LightLocalizer {
 	private Odometer odometer;
 	private SampleProvider colorSensor;
 	private final double BLACK_LINE = 40.0;
+	private final double SENSOR_OFFSET = 8.0;
 	public static float color;
 	public static double locX;
 	public static double locY;
 	private float[] colorData;	
 	private Navigation navigation;
+	private float forwardSpeed;
 	
 	/**
 	 *  Constructor
@@ -31,7 +33,9 @@ public class LightLocalizer {
 		this.odometer = odometer;
 		this.colorSensor = colorSensor;
 		this.colorData = colorData;
-		navigation = new Navigation (odometer);
+		this.forwardSpeed = Navigation.FORWARD_SPEED;
+		this.navigation = new Navigation (odometer);
+		
 	}
 	
 	/**
@@ -57,7 +61,7 @@ public class LightLocalizer {
 		locY = odometer.getY();
 		
 		// Travel to the zero-zero point
-		navigation.travelTo(locX-15, locY-15);
+		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET);
 		navigation.turnTo(0, true);
 		
 		// Sets the odometer to (0,0);
@@ -70,7 +74,7 @@ public class LightLocalizer {
 	 *  @since 1.0
 	 */
 	private void runUntilLine(){
-		navigation.setSpeeds(Navigation.FORWARD_SPEED,Navigation.FORWARD_SPEED);
+		navigation.setSpeeds(forwardSpeed,forwardSpeed);
 		color = getColorData();
 		
 		while (color > BLACK_LINE){
@@ -85,7 +89,7 @@ public class LightLocalizer {
 	 *  @since 1.0
 	 */
 	private void backOff(int point, char axis){
-		navigation.setSpeeds(-Navigation.FORWARD_SPEED,-Navigation.FORWARD_SPEED);
+		navigation.setSpeeds(-forwardSpeed,-forwardSpeed);
 		if (axis == 'x'){
 			double location = odometer.getX();
 			while ((int) location != point){
