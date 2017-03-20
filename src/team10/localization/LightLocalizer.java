@@ -50,7 +50,7 @@ public class LightLocalizer {
 		
 		// Get the x-axis value for the line, back up to original position
 		runUntilLine();
-		locX = odometer.getX();
+		locX = odometer.getY();
 		backOff(0, 'y');
 		
 		// Turn to 90 and run
@@ -58,10 +58,10 @@ public class LightLocalizer {
 		
 		// Get the y-axis value for the line
 		runUntilLine();
-		locY = odometer.getY();
+		locY = odometer.getX();
 		
 		// Travel to the zero-zero point
-		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET);
+		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET, false);
 		//navigation.waitTillCompleted();
 		//navigation.turnTo(0, true);
 		
@@ -82,7 +82,7 @@ public class LightLocalizer {
 		
 		// Get the x-axis value for the line, back up to original position
 		runUntilLine();
-		locX = odometer.getX();
+		locX = odometer.getY();
 		backOff(0, 'y');
 		
 		// Turn to 90 and run
@@ -90,7 +90,7 @@ public class LightLocalizer {
 		
 		// Get the y-axis value for the line
 		runUntilLine();
-		locY = odometer.getY();
+		locY = odometer.getX();
 		
 		// Travel to the zero-zero point
 		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET, false);

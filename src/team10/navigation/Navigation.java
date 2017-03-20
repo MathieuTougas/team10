@@ -15,7 +15,7 @@ public class Navigation {
 	public static final int FORWARD_SPEED = 200;
 	public static final int ROTATE_SPEED = 200;
 	private static final int ACCELERATION = 1000;
-	final static double DEG_ERR = 1, CM_ERR = 1.0;
+	final static double CM_ERR = 1.0;
 	final static double DEGREE_ERR = 1;
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
 	private Odometer odometer;
@@ -185,6 +185,7 @@ public class Navigation {
 		double tetha = getAngle(currentX, currentY, x, y);
 		tetha += odometer.getTheta();
 		turnTo(tetha);
+		waitTillCompleted();
 		
 		// Set the motors speed forward
 		leftMotor.setSpeed(FORWARD_SPEED);

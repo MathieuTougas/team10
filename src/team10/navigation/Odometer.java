@@ -20,7 +20,7 @@ public class Odometer extends Thread {
 	// Static ressources
 	public static final double WHEEL_RADIUS = 2.1;
 	public static final double WHEEL_BASE = 13.4;
-	private static final long ODOMETER_PERIOD = 25;
+	private static final long ODOMETER_PERIOD = 30;
 	
 
 	// lock object for mutual exclusion
