@@ -10,7 +10,7 @@ import team10.navigation.Odometer;
 import team10.wifi.WifiConnection;
 
 // TODO Fix Odometry tile corrections
-
+// TODO Add filtering for light sensor
 /**
  * Main class for robot control
  * 
@@ -19,13 +19,14 @@ import team10.wifi.WifiConnection;
  * 
  */
 public class Main {
+	private static final double TILE_SIZE = 30.98;
 	// WIFI
 	private static final String SERVER_IP = "192.168.2.38";
 	private static final int TEAM_NUMBER = 10;
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
 	
 	// NAVIGATION
-	private static final double [][] CORNERS = {{-0.0, 0.0, Odometer.getRadAngle(90.0)},{10.0, 0.0, Odometer.getRadAngle(0.0)}, {10.0, 10.0, Odometer.getRadAngle(270.0)}, {0.0, 10.0, Odometer.getRadAngle(180.0)}};
+	private static final double [][] CORNERS = {{-0.0, 0.0, Odometer.getRadAngle(90.0)},{convertTileToDistance(10), 0.0, Odometer.getRadAngle(0.0)}, {convertTileToDistance(10), convertTileToDistance(10), Odometer.getRadAngle(270.0)}, {0.0, convertTileToDistance(10), Odometer.getRadAngle(180.0)}};
 	
 	private static Map data;
 
@@ -159,6 +160,6 @@ public class Main {
 	 *  @since 1.0
 	 */
 	private static double convertTileToDistance(int tile){
-		return tile*30.98;
+		return tile*TILE_SIZE;
 	}
 }
