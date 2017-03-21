@@ -2,16 +2,14 @@ package team10;
 
 import java.util.Map;
 import lejos.hardware.Button;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.TextLCD;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.port.Port;
 import team10.launcher.Catapult;
 import team10.localization.Localization;
 import team10.navigation.Display;
 import team10.navigation.Navigation;
 import team10.navigation.Odometer;
 import team10.wifi.WifiConnection;
+
+// TODO Fix Odometry tile corrections
 
 /**
  * Main class for robot control
@@ -20,7 +18,6 @@ import team10.wifi.WifiConnection;
  * @version 1.0
  * 
  */
-
 public class Main {
 	// WIFI
 	private static final String SERVER_IP = "192.168.2.38";
@@ -104,16 +101,16 @@ public class Main {
 			}
 			
 			// Go in front of the ball dispenser
-			navigation.travelTo(xDest, yDest);
+			navigation.travelTo(convertTileToDistance(xDest), convertTileToDistance(yDest));
 			
 			// Go to the ball dispenser
-			navigation.travelTo(disp_x, disp_y);
+			navigation.travelTo(convertTileToDistance(disp_x), convertTileToDistance(disp_y));
 			
 			// Wait
 			wait(1.0);
 			
 			// Go to the ball dispenser
-			navigation.travelTo(5, fwd_line);
+			navigation.travelTo(convertTileToDistance(5), convertTileToDistance(fwd_line));
 			
 			// spawn a new Thread
 			(new Thread() {
@@ -154,5 +151,14 @@ public class Main {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 *  Wait a determined amount of time
+	 * 
+	 *  @since 1.0
+	 */
+	private static double convertTileToDistance(int tile){
+		return tile*30.98;
 	}
 }
