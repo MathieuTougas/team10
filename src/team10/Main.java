@@ -19,14 +19,13 @@ import team10.wifi.WifiConnection;
  * 
  */
 public class Main {
-	private static final double TILE_SIZE = 30.98;
 	// WIFI
 	private static final String SERVER_IP = "192.168.2.38";
 	private static final int TEAM_NUMBER = 10;
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
 	
 	// NAVIGATION
-	private static final double [][] CORNERS = {{-0.0, 0.0, Odometer.getRadAngle(90.0)},{convertTileToDistance(10), 0.0, Odometer.getRadAngle(0.0)}, {convertTileToDistance(10), convertTileToDistance(10), Odometer.getRadAngle(270.0)}, {0.0, convertTileToDistance(10), Odometer.getRadAngle(180.0)}};
+	private static final double [][] CORNERS = {{-0.0, 0.0, Odometer.getRadAngle(90.0)},{Navigation.convertTileToDistance(10), 0.0, Odometer.getRadAngle(0.0)}, {Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(10), Odometer.getRadAngle(270.0)}, {0.0, Navigation.convertTileToDistance(10), Odometer.getRadAngle(180.0)}};
 	
 	private static Map data;
 
@@ -102,16 +101,16 @@ public class Main {
 			}
 			
 			// Go in front of the ball dispenser
-			navigation.travelTo(convertTileToDistance(xDest), convertTileToDistance(yDest));
+			navigation.travelTo(Navigation.convertTileToDistance(xDest), Navigation.convertTileToDistance(yDest));
 			
 			// Go to the ball dispenser
-			navigation.travelTo(convertTileToDistance(disp_x), convertTileToDistance(disp_y));
+			navigation.travelTo(Navigation.convertTileToDistance(disp_x), Navigation.convertTileToDistance(disp_y));
 			
 			// Wait
-			wait(1.0);
+			Navigation.wait(1.0);
 			
 			// Go to the ball dispenser
-			navigation.travelTo(convertTileToDistance(5), convertTileToDistance(fwd_line));
+			navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(fwd_line));
 			
 			// spawn a new Thread
 			(new Thread() {
@@ -139,27 +138,5 @@ public class Main {
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
 		catapult.disengageStabilizers();
 		System.exit(0);
-	}
-	
-	/**
-	 *  Wait a determined amount of time
-	 * 
-	 *  @since 1.0
-	 */
-	private static void wait(double seconds){
-		try {
-			Thread.sleep((long) (seconds*1000));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 *  Wait a determined amount of time
-	 * 
-	 *  @since 1.0
-	 */
-	private static double convertTileToDistance(int tile){
-		return tile*TILE_SIZE;
 	}
 }

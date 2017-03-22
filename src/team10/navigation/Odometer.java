@@ -245,4 +245,15 @@ public class Odometer extends Thread {
 			this.rightMotorTachoCount = rightMotorTachoCount;	
 		}
 	}
+	
+	/**
+	 * Get the angle to travel. This function handles negative x values
+	 * 
+	 *  @since 1.0
+	 */
+	public static void waitTillCompleted(){
+		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
+			motor.waitComplete();
+		}
+	}
 }

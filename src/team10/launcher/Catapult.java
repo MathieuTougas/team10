@@ -2,6 +2,7 @@ package team10.launcher;
 
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import team10.navigation.Navigation;
 
 /**
  * Handles the ball launcher
@@ -40,7 +41,7 @@ public class Catapult {
 		}
 
 		// wait
-		wait(1.0);
+		Navigation.wait(1.0);
 		
 		stabilizerMotor.setSpeed(POSITION_SPEED);
 		stabilizerActive = false;
@@ -54,7 +55,7 @@ public class Catapult {
 		catapultMotor.rotate(150, true);
 		
 		// Relace the catapult arm
-		wait(1.0);
+		Navigation.wait(1.0);
 		catapultMotor.setSpeed(POSITION_SPEED);
 		catapultMotor.rotate(-150, true);
 		
@@ -69,7 +70,7 @@ public class Catapult {
 	public void engageStabilizers(){
 		if (stabilizerActive == false) {
 		stabilizerMotor.rotate(150, true);
-		wait(4.0);
+		Navigation.wait(4.0);
 		}
 		stabilizerActive = true;
 	}
@@ -83,21 +84,8 @@ public class Catapult {
 	public void disengageStabilizers(){
 		if (stabilizerActive == true) {
 			stabilizerMotor.rotate(-150, true);
-			wait(4.0);
+			Navigation.wait(4.0);
 		}
 		stabilizerActive = false;
-	}
-	
-	/**
-	 *  Wait a determined amount of time
-	 * 
-	 *  @since 1.0
-	 */
-	private static void wait(double seconds){
-		try {
-			Thread.sleep((long) (seconds*1000));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 }

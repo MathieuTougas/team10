@@ -15,6 +15,7 @@ public class Navigation {
 	public static final int FORWARD_SPEED = 200;
 	public static final int ROTATE_SPEED = 200;
 	private static final int ACCELERATION = 1000;
+	private static final double TILE_SIZE = 30.98;
 	final static double CM_ERR = 1.0;
 	final static double DEGREE_ERR = 1;
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
@@ -185,7 +186,7 @@ public class Navigation {
 		double tetha = getAngle(currentX, currentY, x, y);
 		tetha += odometer.getTheta();
 		turnTo(tetha);
-		waitTillCompleted();
+		Odometer.waitTillCompleted();
 		
 		// Set the motors speed forward
 		leftMotor.setSpeed(FORWARD_SPEED);
@@ -283,16 +284,6 @@ public class Navigation {
 	}
 	
 	/**
-	 * Get the angle to travel. This function handles negative x values
-	 * 
-	 *  @since 1.0
-	 */
-	public void waitTillCompleted(){
-		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {
-			motor.waitComplete();
-		}
-	}
-	/**
 	 * Get the distance from the US sensor
 	 * 
 	 *  @since 1.0
@@ -323,5 +314,27 @@ public class Navigation {
 			tetha = Math.atan(xDiff/yDiff) - Math.PI;
 		}		
 		return tetha;
+	}
+	
+	/**
+	 *  Wait a determined amount of time
+	 * 
+	 *  @since 1.0
+	 */
+	public static void wait(double seconds){
+		try {
+			Thread.sleep((long) (seconds*1000));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 *  Wait a determined amount of time
+	 * 
+	 *  @since 1.0
+	 */
+	public static double convertTileToDistance(int tile){
+		return tile*TILE_SIZE;
 	}
 }
