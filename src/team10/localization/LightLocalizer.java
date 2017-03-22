@@ -16,7 +16,8 @@ public class LightLocalizer {
 	private Odometer odometer;
 	private SampleProvider colorSensor;
 	private final double BLACK_LINE = 40.0;
-	private final double SENSOR_OFFSET = 8.0;
+	private final double OFFSET_X = 0;
+	private final double OFFSET_Y = 6.5;
 	public static float color;
 	public static double locX;
 	public static double locY;
@@ -44,30 +45,29 @@ public class LightLocalizer {
 	 *  @since 1.0
 	 */
 	public void doLocalization() {
-		odometer.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
+		odometer.setPosition(new double [] {0.0, 0.0, 0}, new boolean [] {true, true, true});
 		locX = 0;
 		locY = 0;
 		
 		// Get the x-axis value for the line, back up to original position
 		runUntilLine();
-		locY = odometer.getY();
-		backOff(0.0, 'y');
+		locX = odometer.getX();
+		backOff(0.0, 'x');
 		
 		// Turn to 90 and run
 		navigation.turnTo(90, true);
 		
 		// Get the y-axis value for the line
 		runUntilLine();
-		locX = odometer.getX();
+		locY = odometer.getY() - OFFSET_Y;
 		
 		// Travel to the zero-zero point
-		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET, false);
+		navigation.travelTo(locX, locY, true);
+		navigation.turnTo(0, true);
 		//navigation.waitTillCompleted();
-		navigation.turnTo(Math.PI/2);
-		runUntilLine();
 		
 		// Sets the odometer to (0,0);
-		odometer.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
+		//odometer.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
 	}
 	
 	/**
@@ -83,18 +83,18 @@ public class LightLocalizer {
 		
 		// Get the x-axis value for the line, back up to original position
 		runUntilLine();
-		locX = odometer.getY();
+		locY = odometer.getY();
 		backOff(0, 'y');
 		
 		// Turn to 90 and run
-		navigation.turnTo(90, true);
+		navigation.turnTo(0, true);
 		
 		// Get the y-axis value for the line
 		runUntilLine();
-		locY = odometer.getX();
+		locX = odometer.getX();
 		
 		// Travel to the zero-zero point
-		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET, false);
+		navigation.travelTo(locX-OFFSET_X, locY-OFFSET_Y, false);
 		navigation.turnTo(0, true);
 		
 		// Sets the odometer to (0,0);

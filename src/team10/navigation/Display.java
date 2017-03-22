@@ -60,8 +60,8 @@ public class Display extends Thread {
 			lcd.drawString("Cs: ", 8, 2);
 			lcd.drawString("CalX: ", 8, 3);
 			lcd.drawString("CalY: ", 8, 4);
-			lcd.drawInt((int)(position[0] * 10), 3, 1);
-			lcd.drawInt((int)(position[1] * 10), 3, 2);
+			lcd.drawInt((int)(position[0]), 3, 1);
+			lcd.drawInt((int)(position[1]), 3, 2);
 			lcd.drawString(formattedDoubleToString(position[2], 2), 3, 3);
 			lcd.drawString(formattedDoubleToString(USLocalizer.angleA, 2), 3, 5);
 			lcd.drawString(formattedDoubleToString(USLocalizer.angleB, 2), 3, 6);

@@ -12,9 +12,9 @@ import lejos.robotics.SampleProvider;
  */
 
 public class Navigation {
-	public static final int FORWARD_SPEED = 200;
-	public static final int ROTATE_SPEED = 200;
-	private static final int ACCELERATION = 1000;
+	public static final int FORWARD_SPEED = 50;
+	public static final int ROTATE_SPEED = 50;
+	private static final int ACCELERATION = 200;
 	private static final double TILE_SIZE = 30.98;
 	final static double CM_ERR = 1.0;
 	final static double DEGREE_ERR = 1;
@@ -183,10 +183,11 @@ public class Navigation {
 	
 	public void travelTo(double x, double y, boolean other){
 		// Turn to the desired angle
+		destX = (int) x;
+		destY = (int) y;
 		double tetha = getAngle(currentX, currentY, x, y);
 		tetha += odometer.getTheta();
 		turnTo(tetha);
-		Odometer.waitTillCompleted();
 		
 		// Set the motors speed forward
 		leftMotor.setSpeed(FORWARD_SPEED);

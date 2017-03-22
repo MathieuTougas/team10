@@ -46,8 +46,8 @@ public class Localization {
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		
 		// perform the ultrasonic localization
-		USLocalizer usl = new USLocalizer(odometer, usValue, usData, localization_type);
-		usl.doLocalization();
+		//USLocalizer usl = new USLocalizer(odometer, usValue, usData, localization_type);
+		//usl.doLocalization();
 		
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		
