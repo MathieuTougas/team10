@@ -50,20 +50,21 @@ public class LightLocalizer {
 		
 		// Get the x-axis value for the line, back up to original position
 		runUntilLine();
-		locX = odometer.getY();
-		backOff(0, 'y');
+		locY = odometer.getY();
+		backOff(0.0, 'y');
 		
 		// Turn to 90 and run
 		navigation.turnTo(90, true);
 		
 		// Get the y-axis value for the line
 		runUntilLine();
-		locY = odometer.getX();
+		locX = odometer.getX();
 		
 		// Travel to the zero-zero point
 		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET, false);
 		//navigation.waitTillCompleted();
-		//navigation.turnTo(0, true);
+		navigation.turnTo(Math.PI/2);
+		runUntilLine();
 		
 		// Sets the odometer to (0,0);
 		odometer.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
@@ -120,7 +121,7 @@ public class LightLocalizer {
 	 * 
 	 *  @since 1.0
 	 */
-	private void backOff(int point, char axis){
+	private void backOff(double point, char axis){
 		navigation.setSpeeds(-forwardSpeed,-forwardSpeed);
 		if (axis == 'x'){
 			double location = odometer.getX();

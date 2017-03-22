@@ -218,7 +218,7 @@ public class Navigation {
 	 * 
 	 *  @since 1.0
 	 */
-	private void turnTo(double tetha){
+	public void turnTo(double tetha){
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
 		
@@ -263,7 +263,11 @@ public class Navigation {
 	 *  @since 1.0
 	 */
 	public void goForward(double distance) {
-		this.travelTo(Math.cos(Math.toRadians(this.odometer.getTheta())) * distance, Math.cos(Math.toRadians(this.odometer.getTheta())) * distance);
+		//this.travelTo(Math.cos(Math.toRadians(this.odometer.getTheta())) * distance, Math.cos(Math.toRadians(this.odometer.getTheta())) * distance);
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		leftMotor.rotate(convertDistance(wheelRadius, distance), true);
+		rightMotor.rotate(convertDistance(wheelRadius, distance), false);
 
 	}
 	
