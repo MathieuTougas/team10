@@ -6,13 +6,12 @@ import team10.navigation.Display;
 import team10.navigation.Odometer;
 
 /**
- * Main class for robot control
+ * Localisation testing class
  * 
  * @author Mathieu Tougas
  * @version 1.0
  * 
  */
-
 public class LocalizationTest {
 
 	public static void main(String[] args) {

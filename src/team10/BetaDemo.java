@@ -13,7 +13,7 @@ import team10.wifi.WifiConnection;
 // TODO Fix Odometry tile corrections
 // TODO Add filtering for light sensor
 /**
- * Main class for robot control
+ * Beta demo running class
  * 
  * @author Mathieu Tougas
  * @version 1.0
