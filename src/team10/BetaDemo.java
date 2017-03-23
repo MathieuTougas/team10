@@ -10,13 +10,12 @@ import team10.navigation.Navigation;
 import team10.navigation.Odometer;
 import team10.wifi.WifiConnection;
 
-// TODO Fix Odometry tile corrections
 // TODO Add filtering for light sensor
 /**
  * Beta demo running class
  * 
  * @author Mathieu Tougas
- * @version 1.0
+ * @version 2.0
  * 
  */
 public class BetaDemo {

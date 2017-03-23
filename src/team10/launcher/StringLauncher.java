@@ -8,7 +8,7 @@ import team10.navigation.Navigation;
  * Handles the ball launcher
  * 
  * @author Mathieu Tougas
- * @version 1.0
+ * @version 2.0
  * 
  */
 
@@ -22,7 +22,7 @@ public class StringLauncher {
 	/**
 	 *  Constructor
 	 * 
-	 *  @since 1.0
+	 *  @since 2.0
 	 */
 	public StringLauncher (){
 	}
@@ -30,7 +30,7 @@ public class StringLauncher {
 	/**
 	 *  Fire the ball
 	 * 
-	 *  @since 1.0
+	 *  @since 2.0
 	 */
 	public void fire() {
 		// reset the firing motors

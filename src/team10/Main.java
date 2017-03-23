@@ -15,7 +15,7 @@ import team10.wifi.WifiConnection;
  * Main class for robot control
  * 
  * @author Mathieu Tougas
- * @version 1.0
+ * @version 2.0
  * 
  */
 public class Main {

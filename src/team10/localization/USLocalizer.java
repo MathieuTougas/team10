@@ -56,7 +56,7 @@ public class USLocalizer {
 			distance = getFilteredData();
 			distError = bandCenter - distance;
 			if (distError > BANDWIDTH) {
-				navigation.turnAng(-45,true);
+				navigation.turn(-45);
 			}
 			navigation.setSpeeds(turnSpeed,-turnSpeed);
 			turnUntilNoWall();
@@ -103,7 +103,7 @@ public class USLocalizer {
 			angleB = odo.getTheta();
 			
 			// Face away
-			navigation.turnAng(45,true);
+			navigation.turn(45);
 			
 			// Turn until it does'nt see the wall anymore
 			navigation.setSpeeds(-turnSpeed,turnSpeed);

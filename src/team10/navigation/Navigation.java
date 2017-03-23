@@ -7,7 +7,7 @@ import lejos.robotics.SampleProvider;
  * Handles the directions calculation for the robot
  * 
  * @author Mathieu Tougas
- * @version 1.0
+ * @version 2.0
  * 
  */
 
@@ -107,22 +107,6 @@ public class Navigation {
 	}
 	
 	/**
-	 *  Turn fixed angle
-	 *  
-	 *  @param double angle (deg)
-	 *  @param boolean stop
-	 *  
-	 *  @since 1.0
-	 */
-	public void turnAng(double angle, boolean stop){
-			leftMotor.setSpeed(ROTATE_SPEED);
-			rightMotor.setSpeed(ROTATE_SPEED);
-			
-			leftMotor.rotate(-convertAngle(wheelRadius, width, angle), true);
-			rightMotor.rotate(convertAngle(wheelRadius, width, angle), false);
-	}
-	
-	/**
 	 *  Converts distance in wheelturns
 	 * 
 	 *  @since 1.0
@@ -205,23 +189,12 @@ public class Navigation {
 			currentY = odometer.getY();
 		}
 	}
-	/*
-	public void travelTo(double x, double y) {
-		double minAng;
-		while (Math.abs(x - odometer.getX()) > CM_ERR || Math.abs(y - odometer.getY()) > CM_ERR) {
-			minAng = (Math.atan2(y - odometer.getY(), x - odometer.getX())) * (180.0 / Math.PI);
-			if (minAng < 0)
-				minAng += 360.0;
-			this.turnTo(minAng, false);
-			this.setSpeeds(ROTATE_SPEED, ROTATE_SPEED);
-		}
-		this.setSpeeds(0, 0);
-	}*/
+
 	
 	/**
 	 *  Turn to the desired angle (rads)
 	 * 
-	 *  @since 1.0
+	 *  @since 2.0
 	 */
 	public void turn(double tetha){
 		leftMotor.setSpeed(ROTATE_SPEED);

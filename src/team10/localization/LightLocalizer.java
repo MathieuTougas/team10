@@ -8,7 +8,7 @@ import team10.navigation.Odometer;
  * Handles the light localization for the robot
  * 
  * @author Mathieu Tougas
- * @version 1.0
+ * @version 2.0
  * 
  */
 
@@ -74,7 +74,7 @@ public class LightLocalizer {
 	 *  Do the localization routine, overriding with initial position
 	 * 
 	 *  @param initialPosition (x, y, theta)
-	 *  @since 1.0
+	 *  @since 2.0
 	 */
 	public void doLocalization(double[] initialPosition) {
 		odometer.setPosition(new double [] {0.0, 0.0, 0}, new boolean [] {true, true, true});
