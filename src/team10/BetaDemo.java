@@ -20,14 +20,12 @@ import team10.wifi.WifiConnection;
  */
 public class BetaDemo {
 	// WIFI
-	private static final String SERVER_IP = "192.168.2.38";
+	private static final String SERVER_IP = "192.168.2.3";
 	private static final int TEAM_NUMBER = 10;
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
 	
 	// NAVIGATION
-	private static final double [][] CORNERS = {{-0.0, 0.0, 0.0},{Navigation.convertTileToDistance(10), 0.0, Odometer.getRadAngle(90.0)}, {Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(10), Odometer.getRadAngle(180.0)}, {0.0, Navigation.convertTileToDistance(10), Odometer.getRadAngle(270.0)}};
-	
-	private static Map data;
+	private static final double [][] CORNERS = {{-0.0, 0.0, 0.0},{Navigation.convertTileToDistance(6), 0.0, Odometer.getRadAngle(90.0)}, {Navigation.convertTileToDistance(6), Navigation.convertTileToDistance(6), Odometer.getRadAngle(180.0)}, {0.0, Navigation.convertTileToDistance(6), Odometer.getRadAngle(270.0)}};
 
 	public static void main(String[] args) {
 		int fwdTeam = 0;
@@ -50,44 +48,39 @@ public class BetaDemo {
 
 			// Get team numbers
 			fwdTeam = ((Long) data.get("FWD_TEAM")).intValue();
-			defTeam = ((Long) data.get("DEF_TEAM")).intValue();
+			
+			lcdDisplay.clear();
+			// Wait for our team number to be called
+			while (fwdTeam != TEAM_NUMBER);
+
+			// Forward
+			// Get data
+			int fwd_corner = ((Long) data.get("FWD_CORNER")).intValue();
+			int fwd_line = ((Long) data.get("d1")).intValue();
+			double [] initialPosition = CORNERS[fwd_corner-1];
+			
+			
+			// Start odometry
+			odometer.start();
+			lcdDisplay.start();
+			
+			// Do localization
+			localization.doLocalization(initialPosition);
+			// Go to the forward line
+			
+			navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(0));
+			navigation.turnTo(180, true);
+			
+			// Wait
+			Navigation.wait(1.0);
+			
+			// Fire the ball
+			stringLauncher.fire();
+			
+			while (Button.waitForAnyPress() != Button.ID_ESCAPE);
+			System.exit(0);
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
-		
-		do {
-			// Clear display
-			lcdDisplay.clear();
-			
-		} 
-		// Wait for our team number to be called
-		while (fwdTeam != 10);
-
-		// Forward
-		// Get data
-		int fwd_corner = ((Long) data.get("FWD_CORNER")).intValue();
-		int fwd_line = ((Long) data.get("d1")).intValue();
-		double [] initialPosition = CORNERS[fwd_corner-1];
-		
-		
-		// Start odometry
-		odometer.start();
-		lcdDisplay.start();
-		
-		// Do localization
-		localization.doLocalization(initialPosition);
-		// Go to the forward line
-		
-		navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(0));
-		navigation.turnTo(180, true);
-		
-		// Wait
-		Navigation.wait(1.0);
-		
-		// Fire the ball
-		stringLauncher.fire();
-		
-		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
-		System.exit(0);
 	}
 }
