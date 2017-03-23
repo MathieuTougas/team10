@@ -1,6 +1,7 @@
 package team10;
 
 import lejos.hardware.Button;
+import lejos.hardware.Sound;
 import team10.launcher.StringLauncher;
 import team10.localization.Localization;
 import team10.navigation.Display;
@@ -40,14 +41,30 @@ public class LocalizationTest {
 		// Do localization
 		localization.doLocalization(initialPosition);
 		
-		navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(0));
+		navigation.travelTo(Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(5));
 		navigation.turnTo(180, true);
+		Sound.beep();
+		/*System.out.println("X : " + Odometer.getX() + "Y : " + Odometer.getY());
+		System.out.println("Theta : " + Navigation.tetha);
+		navigation.travelTo(Navigation.convertTileToDistance(3), Navigation.convertTileToDistance(4));
+		Sound.beep();
+		System.out.println("X : " + Odometer.getX() + "Y : " + Odometer.getY());
+		System.out.println("Theta : " + Navigation.tetha);
+		navigation.travelTo(Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(4));
+		Sound.beep();
+		System.out.println("X : " + Odometer.getX() + "Y : " + Odometer.getY());
+		System.out.println("Theta : " + Navigation.tetha);
+		navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(0));
+		Sound.beep();
+		System.out.println("X : " + Odometer.getX() + "Y : " + Odometer.getY());
+		System.out.println("Theta : " + Navigation.tetha);
 		
-		int x = 1;
+		
+		/*int x = 1;
 		while (x == 1) {
 			while (Button.waitForAnyPress() != Button.ID_ENTER);
 			stringLauncher.fire();
-		}
+		}*/
 		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
 		System.exit(0);

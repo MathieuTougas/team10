@@ -25,7 +25,7 @@ public class Navigation {
 	private boolean onPoint;
 	private SampleProvider usDistance;
 	private float[] usData;
-	
+	public static double tetha;
 	public static double angleToTurn;
 	
 	/**
@@ -147,7 +147,7 @@ public class Navigation {
 	 */
 	public void travelTo(int x, int y){
 		// Turn to the desired angle
-		double tetha = getAngle(currentX, currentY, x, y);
+		tetha = getAngle(currentX, currentY, x, y);
 		tetha += odometer.getTheta();
 		turnTo(tetha, true);
 		

@@ -15,7 +15,9 @@ public class Odometer extends Thread {
 	public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
 	public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 	// robot position
-	private double x, y, theta;
+	private static double x;
+	private static double y;
+	private double theta;
 	private int leftMotorTachoCount, rightMotorTachoCount;
 	// Static ressources
 	public static final double WHEEL_RADIUS = 2.1;
@@ -24,7 +26,7 @@ public class Odometer extends Thread {
 	
 
 	// lock object for mutual exclusion
-	private Object lock;
+	private static Object lock;
 
 	/**
 	 *  Constructor
@@ -128,7 +130,7 @@ public class Odometer extends Thread {
 		}
 	}
 
-	public double getX() {
+	public static double getX() {
 		double result;
 
 		synchronized (lock) {
@@ -138,7 +140,7 @@ public class Odometer extends Thread {
 		return result;
 	}
 
-	public double getY() {
+	public static double getY() {
 		double result;
 
 		synchronized (lock) {
