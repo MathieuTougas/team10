@@ -41,20 +41,20 @@ public class StringLauncher {
 		
 		// Pull back the string
 		pullMotor.setSpeed(PULL_SPEED);
-		pullMotor.rotate(360*6, true);
+		pullMotor.rotate(-360*6, false);
 		Navigation.wait(1.0);
 		
 		// Activate the hook
 		releaseMotor.setSpeed(PULL_SPEED);
-		releaseMotor.rotate(45, true);
+		releaseMotor.rotate(-90, false);
 		Navigation.wait(1.0);
 		
 		// Unwind the string
-		pullMotor.rotate(-360*6, true);
+		pullMotor.rotate(360*6, false);
 		
 		// Fire the catapult
 		releaseMotor.setSpeed(RELEASE_SPEED);
-		releaseMotor.rotate(-45, true);
+		releaseMotor.rotate(90, false);
 	}
 	
 }

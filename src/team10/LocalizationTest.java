@@ -1,6 +1,7 @@
 package team10;
 
 import lejos.hardware.Button;
+import team10.launcher.StringLauncher;
 import team10.localization.Localization;
 import team10.navigation.Display;
 import team10.navigation.Navigation;
@@ -25,6 +26,7 @@ public class LocalizationTest {
 		final Localization localization = new Localization (odometer);
 		final Display lcdDisplay = new Display (odometer);
 		final Navigation navigation = new Navigation(odometer);
+		final StringLauncher stringLauncher = new StringLauncher();
 		
 		int fwd_corner = 1;
 		
@@ -39,8 +41,13 @@ public class LocalizationTest {
 		localization.doLocalization(initialPosition);
 		
 		navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(0));
-		navigation.turnTo(90, true);
-			
+		navigation.turnTo(180, true);
+		
+		int x = 1;
+		while (x == 1) {
+			while (Button.waitForAnyPress() != Button.ID_ENTER);
+			stringLauncher.fire();
+		}
 		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
 		System.exit(0);
