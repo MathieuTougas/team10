@@ -16,8 +16,12 @@ public class LightLocalizer {
 	private Odometer odometer;
 	private SampleProvider colorSensor;
 	private final double BLACK_LINE = 40.0;
+<<<<<<< HEAD
 	private final double OFFSET_X = 6.5;
 	private final double OFFSET_Y = 6.5;
+=======
+	private final double SENSOR_OFFSET = 15.0;
+>>>>>>> master
 	public static float color;
 	public static double locX;
 	public static double locY;
@@ -62,9 +66,17 @@ public class LightLocalizer {
 		locY = odometer.getY() - OFFSET_Y;
 		
 		// Travel to the zero-zero point
+<<<<<<< HEAD
 		navigation.travelTo(locX, locY);
 		navigation.turnTo(0, true);
 
+=======
+		navigation.travelTo(locX-SENSOR_OFFSET, locY-SENSOR_OFFSET, false);
+		//navigation.waitTillCompleted();
+		navigation.turnTo(0, true);
+		
+		// Sets the odometer to (0,0);
+>>>>>>> master
 		odometer.setPosition(new double [] {0.0, 0.0, 0.0}, new boolean [] {true, true, true});
 	}
 	
