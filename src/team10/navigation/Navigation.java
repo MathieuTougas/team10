@@ -13,18 +13,20 @@ import lejos.robotics.SampleProvider;
 
 public class Navigation {
 	public static final int FORWARD_SPEED = 200;
-	public static final int ROTATE_SPEED = 200;
-	private static final int ACCELERATION = 1000;
+	public static final int ROTATE_SPEED = 150;
+	private static final int ACCELERATION = 500;
 	private static final double TILE_SIZE = 30.98;
 	final static double CM_ERR = 1.0;
 	final static double DEGREE_ERR = 1;
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
 	private Odometer odometer;
-	static int destX, destY, distW;
+	static double destX, destY, distW;
 	private double currentX, currentY, wheelRadius, width;
 	private boolean onPoint;
 	private SampleProvider usDistance;
 	private float[] usData;
+	
+	public static double angleToTurn;
 	
 	/**
 	 *  Constructor
@@ -147,7 +149,7 @@ public class Navigation {
 		// Turn to the desired angle
 		double tetha = getAngle(currentX, currentY, x, y);
 		tetha += odometer.getTheta();
-		turnTo(tetha);
+		turnTo(tetha, true);
 		
 		// Set the motors speed forward
 		leftMotor.setSpeed(FORWARD_SPEED);
@@ -166,7 +168,7 @@ public class Navigation {
 			
 			// When it reaches a distance of less than 25cm
 			while (distW < 25){
-				turnTo(Math.PI/2);
+				turn(Math.PI/2);
 				distW = getUsDistance(usDistance, usData);
 				wF = true;
 			}
@@ -181,12 +183,15 @@ public class Navigation {
 		}
 	}
 	
-	public void travelTo(double x, double y, boolean other){
+	public void travelTo(double x, double y){
 		// Turn to the desired angle
-		double tetha = getAngle(currentX, currentY, x, y);
-		tetha += odometer.getTheta();
-		turnTo(tetha);
-		Odometer.waitTillCompleted();
+		currentX = odometer.getX();
+		currentY = odometer.getY();
+		destX = x;
+		destY = y;
+		double tetha = -getAngle(currentX, currentY, x, y);
+		angleToTurn = tetha;
+		turn(tetha);
 		
 		// Set the motors speed forward
 		leftMotor.setSpeed(FORWARD_SPEED);
@@ -200,7 +205,7 @@ public class Navigation {
 			currentY = odometer.getY();
 		}
 	}
-	
+	/*
 	public void travelTo(double x, double y) {
 		double minAng;
 		while (Math.abs(x - odometer.getX()) > CM_ERR || Math.abs(y - odometer.getY()) > CM_ERR) {
@@ -211,19 +216,19 @@ public class Navigation {
 			this.setSpeeds(ROTATE_SPEED, ROTATE_SPEED);
 		}
 		this.setSpeeds(0, 0);
-	}
+	}*/
 	
 	/**
 	 *  Turn to the desired angle (rads)
 	 * 
 	 *  @since 1.0
 	 */
-	private void turnTo(double tetha){
+	public void turn(double tetha){
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
 		
-		leftMotor.rotate(convertAngle(wheelRadius, width, tetha*180/Math.PI), true);
-		rightMotor.rotate(-convertAngle(wheelRadius, width, tetha*180/Math.PI), false);
+		leftMotor.rotate(-convertAngle(wheelRadius, width, tetha*180/Math.PI), true);
+		rightMotor.rotate(convertAngle(wheelRadius, width, tetha*180/Math.PI), false);
 	}
 	
 	/**
@@ -263,7 +268,11 @@ public class Navigation {
 	 *  @since 1.0
 	 */
 	public void goForward(double distance) {
-		this.travelTo(Math.cos(Math.toRadians(this.odometer.getTheta())) * distance, Math.cos(Math.toRadians(this.odometer.getTheta())) * distance);
+		//this.travelTo(Math.cos(Math.toRadians(this.odometer.getTheta())) * distance, Math.cos(Math.toRadians(this.odometer.getTheta())) * distance);
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		leftMotor.rotate(convertDistance(wheelRadius, distance), true);
+		rightMotor.rotate(convertDistance(wheelRadius, distance), false);
 
 	}
 	

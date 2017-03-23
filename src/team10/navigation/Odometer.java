@@ -20,7 +20,7 @@ public class Odometer extends Thread {
 	// Static ressources
 	public static final double WHEEL_RADIUS = 2.1;
 	public static final double WHEEL_BASE = 13.4;
-	private static final long ODOMETER_PERIOD = 30;
+	private static final long ODOMETER_PERIOD = 25;
 	
 
 	// lock object for mutual exclusion
@@ -88,8 +88,8 @@ public class Odometer extends Thread {
 					setTheta(getTheta() + 2*Math.PI);
 				
 				// Set x & y to the new value
-				setX(x - (Math.sin(theta))*totalDist);
-				setY(y + (Math.cos(theta))*totalDist);
+				setX(x + (Math.cos(theta))*totalDist);
+				setY(y + (Math.sin(theta))*totalDist);
 				
 				// Update the display
 				double[] positionArray = {x, y, theta};

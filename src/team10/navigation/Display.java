@@ -60,8 +60,9 @@ public class Display extends Thread {
 			lcd.drawString("Cs: ", 8, 2);
 			lcd.drawString("CalX: ", 8, 3);
 			lcd.drawString("CalY: ", 8, 4);
-			lcd.drawInt((int)(position[0] * 10), 3, 1);
-			lcd.drawInt((int)(position[1] * 10), 3, 2);
+			lcd.drawString("CalT: ", 8, 5);
+			lcd.drawString(formattedDoubleToString(position[0], 2), 3, 1);
+			lcd.drawString(formattedDoubleToString(position[1], 2), 3, 2);
 			lcd.drawString(formattedDoubleToString(position[2], 2), 3, 3);
 			lcd.drawString(formattedDoubleToString(USLocalizer.angleA, 2), 3, 5);
 			lcd.drawString(formattedDoubleToString(USLocalizer.angleB, 2), 3, 6);
@@ -70,6 +71,7 @@ public class Display extends Thread {
 			lcd.drawInt((int)LightLocalizer.color, 15, 2);
 			lcd.drawInt((int)LightLocalizer.locX, 15, 3);
 			lcd.drawInt((int)LightLocalizer.locY, 15, 4);
+			lcd.drawString(formattedDoubleToString(Navigation.angleToTurn, 2), 15, 5);
 
 			// throttle the OdometryDisplay
 			displayEnd = System.currentTimeMillis();
