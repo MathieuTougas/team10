@@ -3,7 +3,7 @@ package team10;
 
 import java.util.Map;
 import lejos.hardware.Button;
-import team10.launcher.Catapult;
+import team10.launcher.StringLauncher;
 import team10.localization.Localization;
 import team10.navigation.Display;
 import team10.navigation.Navigation;
@@ -37,7 +37,7 @@ public class BetaDemo {
 		// Instantiate objects
 		final WifiConnection conn = new WifiConnection(SERVER_IP, TEAM_NUMBER, ENABLE_DEBUG_WIFI_PRINT);
 		final Odometer odometer = new Odometer();
-		final Catapult catapult = new Catapult();
+		final StringLauncher stringLauncher = new StringLauncher();
 		final Localization localization = new Localization (odometer);
 		final Navigation navigation = new Navigation(odometer);
 		final Display lcdDisplay = new Display (odometer);
@@ -78,21 +78,17 @@ public class BetaDemo {
 		// Do localization
 		localization.doLocalization(initialPosition);
 		// Go to the forward line
-		navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(fwd_line));
+		
+		navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(0));
+		navigation.turnTo(180, true);
 		
 		// Wait
 		Navigation.wait(1.0);
 		
-		// spawn a new Thread
-		(new Thread() {
-			public void run() {
-				// Fire the catapult
-				catapult.fire();
-			}
-		}).start();
+		// Fire the ball
+		stringLauncher.fire();
 		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
-		catapult.disengageStabilizers();
 		System.exit(0);
 	}
 }
