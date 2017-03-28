@@ -1,6 +1,7 @@
 package team10;
 
 import lejos.hardware.Button;
+import lejos.hardware.Sound;
 import team10.launcher.StringLauncher;
 import team10.localization.Localization;
 import team10.navigation.Display;
@@ -41,7 +42,18 @@ public class LocalizationTest {
 		localization.doLocalization(initialPosition);
 		
 		navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(0));
-		navigation.turnTo(180, true);
+		Sound.beep();
+		Navigation.wait(5.0);
+		navigation.travelTo(Navigation.convertTileToDistance(4), Navigation.convertTileToDistance(4));
+		Sound.beep();
+		Navigation.wait(5.0);
+		navigation.travelTo(Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(6));
+		Sound.beep();
+		Navigation.wait(5.0);
+		navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(0));
+		Sound.beep();
+		Navigation.wait(5.0);
+		navigation.turnTo(270, true);
 		
 		int x = 1;
 		while (x == 1) {
