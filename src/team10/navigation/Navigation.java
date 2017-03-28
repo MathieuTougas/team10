@@ -12,14 +12,14 @@ import lejos.robotics.SampleProvider;
  */
 
 public class Navigation {
-	public static final int FORWARD_SPEED = 200;
-	public static final int ROTATE_SPEED = 150;
-	private static final int ACCELERATION = 500;
-	private static final double TILE_SIZE = 30.98;
-	final static double CM_ERR = 1.0;
-	final static double DEGREE_ERR = 1;
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
 	private Odometer odometer;
+	private static final int FORWARD_SPEED = 200;
+	private static final int ROTATE_SPEED = 150;
+	private static final int ACCELERATION = 500;
+	private static final double TILE_SIZE = 30.98;
+	private final static double DEGREE_ERR = 1;
+	
 	static double destX, destY, distW;
 	private double currentX, currentY, wheelRadius, width;
 	private boolean onPoint;
@@ -42,6 +42,24 @@ public class Navigation {
 		//this.usDistance = Localization.usSensor.getMode("Distance");
 		//this.usData = new float[usDistance.sampleSize()];
 		
+	}
+	
+	/**
+	 * Get forward SPEED
+	 * 
+	 *  @since 1.0
+	 */
+	public static int getForwardSpeed(){
+		return FORWARD_SPEED;
+	}
+	
+	/**
+	 *  Get rotate Speed
+	 * 
+	 *  @since 1.0
+	 */
+	public static int getTurnSpeed(){
+		return ROTATE_SPEED;
 	}
 	
 	/**

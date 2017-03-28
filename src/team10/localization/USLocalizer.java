@@ -35,7 +35,7 @@ public class USLocalizer {
 		this.usSensor = usSensor;
 		this.usData = usData;
 	    this.locType = locType;
-	    this.turnSpeed = Navigation.ROTATE_SPEED;
+	    this.turnSpeed = Navigation.getTurnSpeed();
 	}
 	
 	/**

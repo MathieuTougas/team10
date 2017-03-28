@@ -14,7 +14,11 @@ import team10.navigation.Odometer;
 
 public class LightLocalizer {
 	private Odometer odometer;
+	private Navigation navigation;
+	private float forwardSpeed;
 	private SampleProvider colorSensor;
+	private float[] colorData;	
+	
 	private final double BLACK_LINE = 40.0;
 	private final double OFFSET_X = 6.5;
 	private final double OFFSET_Y = 6.5;
@@ -22,9 +26,9 @@ public class LightLocalizer {
 	public static float color;
 	public static double locX;
 	public static double locY;
-	private float[] colorData;	
-	private Navigation navigation;
-	private float forwardSpeed;
+	
+	
+	
 	
 	/**
 	 *  Constructor
@@ -35,7 +39,7 @@ public class LightLocalizer {
 		this.odometer = odometer;
 		this.colorSensor = colorSensor;
 		this.colorData = colorData;
-		this.forwardSpeed = Navigation.FORWARD_SPEED;
+		this.forwardSpeed = Navigation.getForwardSpeed();
 		this.navigation = new Navigation (odometer);
 		
 	}
