@@ -16,14 +16,18 @@ public class LightLocalizer {
 	private Odometer odometer;
 	private Navigation navigation;
 	private float forwardSpeed;
-	private SampleProvider colorSensor;
-	private float[] colorData;	
+	private SampleProvider leftColorSensor;
+	private SampleProvider rightColorSensor;
+	private float[] leftColorData;	
+	private float[] rightColorData;	
 	
 	private final double BLACK_LINE = 40.0;
 	private final double OFFSET_X = 6.5;
 	private final double OFFSET_Y = 6.5;
+	private final double SENSOR_TRACK = 11.6;
+	private final double SENSOR_OFFSET = 5.35;
 
-	public static float color;
+	public static float leftColor, rightColor;
 	public static double locX;
 	public static double locY;
 	
@@ -35,10 +39,12 @@ public class LightLocalizer {
 	 * 
 	 *  @since 1.0
 	 */
-	public LightLocalizer(Odometer odometer, SampleProvider colorSensor, float[] colorData) {
+	public LightLocalizer(Odometer odometer, SampleProvider leftColorSensor, float[] leftColorData, SampleProvider rightColorSensor, float[] rightColorData) {
 		this.odometer = odometer;
-		this.colorSensor = colorSensor;
-		this.colorData = colorData;
+		this.leftColorSensor = leftColorSensor;
+		this.rightColorSensor = rightColorSensor;
+		this.leftColorData = leftColorData;
+		this.rightColorData = rightColorData;
 		this.forwardSpeed = Navigation.getForwardSpeed();
 		this.navigation = new Navigation (odometer);
 		
@@ -55,7 +61,6 @@ public class LightLocalizer {
 		locY = 0;
 		
 		// Get the x-axis value for the line, back up to original position
-		runUntilLine();
 		locX = odometer.getX() - OFFSET_X;
 		backOff(0.0, 'x');
 		
@@ -63,7 +68,6 @@ public class LightLocalizer {
 		navigation.turnTo(90, true);
 		
 		// Get the y-axis value for the line
-		runUntilLine();
 		locY = odometer.getY() - OFFSET_Y;
 		
 		// Travel to the zero-zero point
@@ -86,19 +90,15 @@ public class LightLocalizer {
 		locY = 0;
 		
 		// Get the x-axis value for the line, back up to original position
-		runUntilLine();
-		locX = odometer.getX() - OFFSET_X;
-		backOff(0.0, 'x');
-		
+		runUntilLine("X");
 		// Turn to 90 and run
+		odometer.setPosition(new double [] {0.0, 0.0, 0}, new boolean [] {true, true, true});
 		navigation.turnTo(90, true);
 		
 		// Get the y-axis value for the line
-		runUntilLine();
-		locY = odometer.getY() - OFFSET_Y;
+		runUntilLine("Y");
 		
 		// Travel to the zero-zero point
-		navigation.travelTo(locX, locY);
 		navigation.turnTo(0, true);
 		
 		// Sets the odometer to (0,0);
@@ -108,16 +108,66 @@ public class LightLocalizer {
 	/**
 	 *  Run the robot forward until it reaches a line
 	 * 
-	 *  @since 1.0
+	 *  @since 2.0
 	 */
-	private void runUntilLine(){
+	private void runUntilLine(String axis){
+		double[] offsets = new double[2];
 		navigation.setSpeeds(forwardSpeed,forwardSpeed);
-		color = getColorData();
+		leftColor = getLeftColorData();
+		rightColor = getRightColorData();
 		
-		while (color > BLACK_LINE){
-			color = getColorData();
+		boolean leftPassed = false;
+		boolean rightPassed = false;
+		if (axis.equals("X")){
+			while (leftPassed == false || rightPassed == false){
+				leftColor = getLeftColorData();
+				rightColor = getRightColorData();
+				if (leftColor < BLACK_LINE){
+					offsets[0] = odometer.getX();
+					leftPassed = true;
+				}
+				else if (rightColor < BLACK_LINE){
+					offsets[1] = odometer.getX();
+					rightPassed = true;
+				}
+			}
 		}
+		else {
+			while (leftPassed == false || rightPassed == false){
+				leftColor = getLeftColorData();
+				rightColor = getRightColorData();
+				if (leftColor < BLACK_LINE){
+					offsets[0] = odometer.getY();
+					leftPassed = true;
+				}
+				else if (rightColor < BLACK_LINE){
+					offsets[1] = odometer.getY();
+					rightPassed = true;
+				}
+			}
+		}
+		correctPosition(offsets, axis);
 		navigation.setSpeeds(0,0);
+	}
+	
+	/**
+	 *  Correct the robot position
+	 * 
+	 *  @since 2.0
+	 */
+	private void correctPosition(double[] positions, String axis){
+		double leftValue = positions[0];
+		double rightValue = positions[1];
+		
+		double diff = leftValue-rightValue;
+		double angle = Math.asin(diff/SENSOR_TRACK);
+		if (axis.equals("X")){
+			navigation.turn(-angle);
+			navigation.goForward(SENSOR_OFFSET-Odometer.getWheelBase()/2*Math.sin(angle));
+		}
+		else{
+			navigation.goForward(SENSOR_OFFSET);
+		}
 	}
 	
 	/**
@@ -146,15 +196,26 @@ public class LightLocalizer {
 	}
 	
 	/**
-	 *  Get data from the color sensor
+	 *  Get data from the left color sensor
+	 * 
+	 *  @since 2.0
+	 */
+	private float getLeftColorData() {
+		leftColorSensor.fetchSample(leftColorData, 0);
+		float color = leftColorData[0]*100;
+		return color;
+	}
+	
+	/**
+	 *  Get data from the rightcolor sensor
 	 * 
 	 *  @since 1.0
 	 */
-	private float getColorData() {
-		colorSensor.fetchSample(colorData, 0);
-		float color = colorData[0]*100;
-
+	private float getRightColorData() {
+		rightColorSensor.fetchSample(rightColorData, 0);
+		float color = rightColorData[0]*100;
 		return color;
 	}
+	
 
 }

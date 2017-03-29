@@ -68,7 +68,7 @@ public class Display extends Thread {
 			lcd.drawString(formattedDoubleToString(USLocalizer.angleB, 2), 3, 6);
 			lcd.drawInt((int)USLocalizer.theta, 3, 7);
 			lcd.drawInt((int)USLocalizer.distance, 15, 1);
-			lcd.drawInt((int)LightLocalizer.color, 15, 2);
+			lcd.drawInt((int)LightLocalizer.leftColor, 15, 2);
 			lcd.drawInt((int)LightLocalizer.locX, 15, 3);
 			lcd.drawInt((int)LightLocalizer.locY, 15, 4);
 			lcd.drawString(formattedDoubleToString(Navigation.angleToTurn, 2), 15, 5);

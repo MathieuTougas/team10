@@ -14,9 +14,9 @@ import lejos.robotics.SampleProvider;
 public class Navigation {
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
 	private Odometer odometer;
-	private static final int FORWARD_SPEED = 200;
-	private static final int ROTATE_SPEED = 150;
-	private static final int ACCELERATION = 500;
+	private static final int FORWARD_SPEED = 100;
+	private static final int ROTATE_SPEED = 50;
+	private static final int ACCELERATION = 250;
 	private static final double TILE_SIZE = 30.98;
 	private final static double DEGREE_ERR = 1;
 	
