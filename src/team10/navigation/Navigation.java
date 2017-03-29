@@ -37,8 +37,8 @@ public class Navigation {
 		this.leftMotor = Odometer.leftMotor;
 		this.rightMotor = Odometer.rightMotor;
 		this.odometer = odometer;
-		this.wheelRadius = Odometer.WHEEL_RADIUS;
-		this.width = Odometer.WHEEL_BASE;
+		this.wheelRadius = Odometer.getWheelRadius();
+		this.width = Odometer.getWheelBase();
 		//this.usDistance = Localization.usSensor.getMode("Distance");
 		//this.usData = new float[usDistance.sampleSize()];
 		
@@ -191,9 +191,9 @@ public class Navigation {
 		currentY = odometer.getY();
 		destX = x;
 		destY = y;
-		double tetha = -getAngle(currentX, currentY, x, y);
-		angleToTurn = tetha;
-		turn(tetha);
+		double tetha = getAngle(currentX, currentY, x, y);
+		angleToTurn = -odometer.getTheta() +tetha;
+		turn(angleToTurn);
 		
 		// Set the motors speed forward
 		leftMotor.setSpeed(FORWARD_SPEED);
@@ -304,14 +304,14 @@ public class Navigation {
 		double yDiff = finalY - initialY;
 		double tetha = 0;
 		
-		if (yDiff >0){
-			tetha = Math.atan(xDiff/yDiff);
+		if (xDiff >0){
+			tetha = Math.atan(yDiff/xDiff);
 		}
-		else if (yDiff < 0 && xDiff > 0) {
-			tetha = Math.atan(xDiff/yDiff) + Math.PI;
+		else if (xDiff < 0 && yDiff > 0) {
+			tetha = Math.atan(yDiff/xDiff) + Math.PI;
 		}
-		else if (yDiff < 0 && xDiff < 0) {
-			tetha = Math.atan(xDiff/yDiff) - Math.PI;
+		else if (xDiff < 0 && yDiff < 0) {
+			tetha = Math.atan(yDiff/xDiff) - Math.PI;
 		}		
 		return tetha;
 	}
@@ -335,6 +335,6 @@ public class Navigation {
 	 *  @since 1.0
 	 */
 	public static double convertTileToDistance(int tile){
-		return tile*TILE_SIZE;
+		return tile*TILE_SIZE + TILE_SIZE;
 	}
 }

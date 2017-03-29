@@ -56,7 +56,7 @@ public class USLocalizer {
 			distance = getFilteredData();
 			distError = bandCenter - distance;
 			if (distError > BANDWIDTH) {
-				navigation.turn(-45);
+				navigation.turn(-Math.PI/4);
 			}
 			navigation.setSpeeds(turnSpeed,-turnSpeed);
 			turnUntilNoWall();

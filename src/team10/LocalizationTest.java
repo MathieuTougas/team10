@@ -17,7 +17,7 @@ import team10.navigation.Odometer;
  */
 public class LocalizationTest {
 
-	private static final double [][] CORNERS = {{-0.0, 0.0, 0.0},{Navigation.convertTileToDistance(10), 0.0, Odometer.getRadAngle(90.0)}, {Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(10), Odometer.getRadAngle(180.0)}, {0.0, Navigation.convertTileToDistance(10), Odometer.getRadAngle(270.0)}};
+	private static final double [][] CORNERS = {{Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(0), 0.0},{Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(0), Odometer.getRadAngle(90.0)}, {Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(10), Odometer.getRadAngle(180.0)}, {Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(10), Odometer.getRadAngle(270.0)}};
 	
 	public static void main(String[] args) {
 
@@ -40,8 +40,8 @@ public class LocalizationTest {
 		// Do localization
 		localization.doLocalization(initialPosition);
 		
-		navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(0));
-		navigation.turnTo(180, true);
+		navigation.travelTo(Navigation.convertTileToDistance(1), Navigation.convertTileToDistance(1));
+		//navigation.turnTo(180, true);
 		
 		int x = 1;
 		while (x == 1) {

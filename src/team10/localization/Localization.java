@@ -5,6 +5,7 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorModes;
+import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 import team10.navigation.Odometer;
 
@@ -53,7 +54,9 @@ public class Localization {
 		
 		// perform the light sensor localization
 		LightLocalizer lsl = new LightLocalizer(odometer, colorValue, colorData);
-		lsl.doLocalization();			
+		lsl.doLocalization();		
+		
+		Sound.beep();
 	}
 	
 	/**
@@ -87,6 +90,8 @@ public class Localization {
 		
 		// perform the light sensor localization
 		LightLocalizer lsl = new LightLocalizer(odometer, colorValue, colorData);
-		lsl.doLocalization(initialPosition);			
+		lsl.doLocalization(initialPosition);
+		
+		Sound.beep();
 	}
 }

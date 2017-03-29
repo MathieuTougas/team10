@@ -7,7 +7,7 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
  * Handles odometer functions for robot
  * 
  * @author Mathieu Tougas
- * @version 1.0
+ * @version 2.0
  * 
  */
 
@@ -18,8 +18,8 @@ public class Odometer extends Thread {
 	private double x, y, theta;
 	private int leftMotorTachoCount, rightMotorTachoCount;
 	// Static ressources
-	public static final double WHEEL_RADIUS = 2.1;
-	public static final double WHEEL_BASE = 13.4;
+	private static final double WHEEL_RADIUS = 2.1;
+	private static final double WHEEL_BASE = 13.4;
 	private static final long ODOMETER_PERIOD = 25;
 	
 
@@ -38,6 +38,24 @@ public class Odometer extends Thread {
 		this.leftMotorTachoCount = 0;
 		this.rightMotorTachoCount = 0;
 		lock = new Object();
+	}
+	
+	/**
+	 *  Return the wheel radius
+	 * 
+	 *  @since 1.0
+	 */
+	public static double getWheelRadius(){
+		return WHEEL_RADIUS;
+	}
+	
+	/**
+	 *  Return the wheel base
+	 * 
+	 *  @since 1.0
+	 */
+	public static double getWheelBase(){
+		return WHEEL_BASE;
 	}
 
 	/**
