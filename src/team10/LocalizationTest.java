@@ -26,7 +26,7 @@ public class LocalizationTest {
 		final Localization localization = new Localization (odometer);
 		final Display lcdDisplay = new Display (odometer);
 		final Navigation navigation = new Navigation(odometer);
-		//final StringLauncher stringLauncher = new StringLauncher();
+		final StringLauncher stringLauncher = new StringLauncher();
 		
 		int fwd_corner = 1;
 		
@@ -39,14 +39,16 @@ public class LocalizationTest {
 		
 		// Do localization
 		localization.doLocalization(initialPosition);
-		//navigation.travelTo(Navigation.convertTileToDistance(1), Navigation.convertTileToDistance(1));
+		//odometer.setPosition(new double [] {0.0, 0.0, 0}, new boolean [] {true, true, true});
+		navigation.travelTo(Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(2));
 		//navigation.turnTo(180, true);
-		/*
+		//navigation.goForward(30.48*3);
+		//navigation.turn(Math.PI*2);
 		int x = 1;
 		while (x == 1) {
 			while (Button.waitForAnyPress() != Button.ID_ENTER);
 			stringLauncher.fire();
-		}*/
+		}
 		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
 		System.exit(0);
