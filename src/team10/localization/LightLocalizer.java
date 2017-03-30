@@ -143,7 +143,7 @@ public class LightLocalizer {
 				}
 			}
 		}
-		navigation.correctPosition(offsets, axis);
+		navigation.correctPosition(offsets, axis, true);
 		navigation.setSpeeds(0,0);
 	}
 	

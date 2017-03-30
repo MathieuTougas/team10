@@ -335,7 +335,7 @@ public class Navigation {
 			// Correct angle
 			if (rightPassed == true && leftPassed == true){
 				setSpeeds(0,0);
-				correctPosition(offsets, axis);
+				correctPosition(offsets, axis, false);
 				leftPassed = false;
 				rightPassed = false;
 			}
@@ -353,7 +353,7 @@ public class Navigation {
 	 * 
 	 *  @since 2.0
 	 */
-	public void correctPosition(double[] positions, String axis){
+	public void correctPosition(double[] positions, String axis, boolean moveForward){
 		double leftValue = positions[0];
 		double rightValue = positions[1];
 		
@@ -361,10 +361,15 @@ public class Navigation {
 		double angle = Math.asin(diff/getSENSOR_TRACK());
 		if (axis.equals("X")){
 			turn(-angle);
-			goForward(getSENSOR_OFFSET()-Math.abs(Odometer.getWheelBase()/2*Math.sin(angle)));
+			if (moveForward == true){
+				goForward(getSENSOR_OFFSET()-Math.abs(Odometer.getWheelBase()/2*Math.sin(angle)));
+			}
 		}
 		else{
-			goForward(getSENSOR_OFFSET());
+			turn(-angle);
+			if (moveForward == true){
+				goForward(getSENSOR_OFFSET()-Math.abs(Odometer.getWheelBase()/2*Math.sin(angle)));
+			}
 		}
 	}
 		
