@@ -6,8 +6,6 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.SampleProvider;
-import team10.localization.LightLocalizer;
-import team10.localization.Localization;
 
 /**
  * Handles the directions calculation for the robot
@@ -39,10 +37,10 @@ public class Navigation {
 	private SampleProvider rightColorValue;
 	private float[] leftColorData;	
 	private float[] rightColorData;
-	private SampleProvider usDistance;
-	private float[] usData;
 	private boolean leftPassed, rightPassed;
 	private double[] offsets;
+	//private SampleProvider usDistance;
+	//private float[] usData;
 	
 	public static double angleToTurn;
 	
@@ -72,24 +70,6 @@ public class Navigation {
 		this.setRightColorValue(rightColorSensor.getMode("Red"));
 		this.rightColorData = new float[getRightColorValue().sampleSize()];
 		
-	}
-	
-	/**
-	 * Get forward SPEED
-	 * 
-	 *  @since 1.0
-	 */
-	public static int getForwardSpeed(){
-		return FORWARD_SPEED;
-	}
-	
-	/**
-	 *  Get rotate Speed
-	 * 
-	 *  @since 1.0
-	 */
-	public static int getTurnSpeed(){
-		return ROTATE_SPEED;
 	}
 	
 	/**
@@ -134,42 +114,6 @@ public class Navigation {
 			
 			travelTo(destX, destY);
 		}
-	}
-	
-	/**
-	 *  Functions to set the motor speeds jointly
-	 *  
-	 *  @since 1.0
-	 */
-	public void setSpeeds(float lSpd, float rSpd) {
-		this.leftMotor.setSpeed(lSpd);
-		this.rightMotor.setSpeed(rSpd);
-		if (lSpd < 0)
-			this.leftMotor.backward();
-		else
-			this.leftMotor.forward();
-		if (rSpd < 0)
-			this.rightMotor.backward();
-		else
-			this.rightMotor.forward();
-	}
-	
-	/**
-	 *  Converts distance in wheelturns
-	 * 
-	 *  @since 1.0
-	 */
-	private static int convertDistance(double radius, double distance) {
-		return (int) ((180.0 * distance) / (Math.PI * radius));
-	}
-
-	/**
-	 *  Converts radians to degrees
-	 * 
-	 *  @since 1.0
-	 */
-	private static int convertAngle(double radius, double width, double angle) {
-		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
 	
 	/**
@@ -407,28 +351,6 @@ public class Navigation {
 	}
 	
 	/**
-	 *  Wait a determined amount of time
-	 * 
-	 *  @since 1.0
-	 */
-	public static void wait(double seconds){
-		try {
-			Thread.sleep((long) (seconds*1000));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 *  Wait a determined amount of time
-	 * 
-	 *  @since 1.0
-	 */
-	public static double convertTileToDistance(int tile){
-		return tile*TILE_SIZE + TILE_SIZE;
-	}
-	
-	/**
 	 *  Get data from the left color sensor
 	 * 
 	 *  @since 2.0
@@ -449,23 +371,20 @@ public class Navigation {
 		float color = rightColorData[0]*100;
 		return color;
 	}
-
+	
+	/**
+	 *  Accessors
+	 * 
+	 *  @since 2.0
+	 */
 	public SampleProvider getRightColorValue() {
 		return rightColorValue;
-	}
-	
-	public void setRightColorValue(SampleProvider rightColorValue) {
-		this.rightColorValue = rightColorValue;
 	}
 
 	public SampleProvider getLeftColorValue() {
 		return leftColorValue;
 	}
-
-	public void setLeftColorValue(SampleProvider leftColorValue) {
-		this.leftColorValue = leftColorValue;
-	}
-
+	
 	public static double getSENSOR_TRACK() {
 		return SENSOR_TRACK;
 	}
@@ -477,4 +396,87 @@ public class Navigation {
 	public double getBLACK_LINE() {
 		return BLACK_LINE;
 	}
+
+	public static int getForwardSpeed(){
+		return FORWARD_SPEED;
+	}
+	
+	public static int getTurnSpeed(){
+		return ROTATE_SPEED;
+	}
+	
+	/**
+	 *  Mutators
+	 * 
+	 *  @since 2.0
+	 */
+	
+	public void setRightColorValue(SampleProvider rightColorValue) {
+		this.rightColorValue = rightColorValue;
+	}
+
+	
+	public void setLeftColorValue(SampleProvider leftColorValue) {
+		this.leftColorValue = leftColorValue;
+	}
+	
+	/**
+	 *  Functions to set the motor speeds jointly
+	 *  
+	 *  @since 1.0
+	 */
+	public void setSpeeds(float lSpd, float rSpd) {
+		this.leftMotor.setSpeed(lSpd);
+		this.rightMotor.setSpeed(rSpd);
+		if (lSpd < 0)
+			this.leftMotor.backward();
+		else
+			this.leftMotor.forward();
+		if (rSpd < 0)
+			this.rightMotor.backward();
+		else
+			this.rightMotor.forward();
+	}
+	
+	/**
+	 *  Converts distance in wheelturns
+	 * 
+	 *  @since 1.0
+	 */
+	private static int convertDistance(double radius, double distance) {
+		return (int) ((180.0 * distance) / (Math.PI * radius));
+	}
+
+	/**
+	 *  Converts radians to degrees
+	 * 
+	 *  @since 1.0
+	 */
+	private static int convertAngle(double radius, double width, double angle) {
+		return convertDistance(radius, Math.PI * width * angle / 360.0);
+	}
+	
+	/**
+	 *  Convert tiles coordinates to distances in cm
+	 * 
+	 *  @since 1.0
+	 */
+	public static double convertTileToDistance(int tile){
+		return tile*TILE_SIZE + TILE_SIZE;
+	}
+	
+	/**
+	 *  Wait a determined amount of time
+	 * 
+	 *  @since 1.0
+	 */
+	public static void wait(double seconds){
+		try {
+			Thread.sleep((long) (seconds*1000));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
 }
