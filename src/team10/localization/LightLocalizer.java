@@ -21,7 +21,6 @@ public class LightLocalizer {
 	private float[] leftColorData;	
 	private float[] rightColorData;	
 	
-	private final static double BLACK_LINE = 40.0;
 	private final double OFFSET_X = 6.5;
 	private final double OFFSET_Y = 6.5;
 
@@ -120,11 +119,11 @@ public class LightLocalizer {
 			while (leftPassed == false || rightPassed == false){
 				leftColor = getLeftColorData();
 				rightColor = getRightColorData();
-				if (leftColor < getBLACK_LINE()){
+				if (leftColor < navigation.getBLACK_LINE()){
 					offsets[0] = odometer.getX();
 					leftPassed = true;
 				}
-				else if (rightColor < getBLACK_LINE()){
+				else if (rightColor < navigation.getBLACK_LINE()){
 					offsets[1] = odometer.getX();
 					rightPassed = true;
 				}
@@ -134,11 +133,11 @@ public class LightLocalizer {
 			while (leftPassed == false || rightPassed == false){
 				leftColor = getLeftColorData();
 				rightColor = getRightColorData();
-				if (leftColor < getBLACK_LINE()){
+				if (leftColor < navigation.getBLACK_LINE()){
 					offsets[0] = odometer.getY();
 					leftPassed = true;
 				}
-				else if (rightColor < getBLACK_LINE()){
+				else if (rightColor < navigation.getBLACK_LINE()){
 					offsets[1] = odometer.getY();
 					rightPassed = true;
 				}
@@ -194,10 +193,4 @@ public class LightLocalizer {
 		float color = rightColorData[0]*100;
 		return color;
 	}
-
-	public static double getBLACK_LINE() {
-		return BLACK_LINE;
-	}
-	
-
 }

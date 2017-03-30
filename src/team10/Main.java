@@ -63,7 +63,6 @@ public class Main {
 		} 
 		// Wait for our team number to be called
 		while (fwdTeam != 10 && defTeam != 10);
-		Sound.beep();
 
 		// Forward
 		if (fwdTeam == 10) {

@@ -29,6 +29,7 @@ public class Navigation {
 	private final static double DEGREE_ERR = 1;
 	private final static double SENSOR_TRACK = 11.6;
 	private final static double SENSOR_OFFSET = 5.35;
+	private final static double BLACK_LINE = 40.0;
 	public static float leftColor, rightColor;
 	
 	static double destX, destY, distW;
@@ -40,6 +41,8 @@ public class Navigation {
 	private float[] rightColorData;
 	private SampleProvider usDistance;
 	private float[] usData;
+	private boolean leftPassed, rightPassed;
+	private double[] offsets;
 	
 	public static double angleToTurn;
 	
@@ -194,16 +197,14 @@ public class Navigation {
 		turn(angleToTurn);
 		
 		// Set the motors speed forward
-		leftMotor.setSpeed(FORWARD_SPEED);
-		rightMotor.setSpeed(FORWARD_SPEED);
-		leftMotor.forward();
-		rightMotor.forward();
+		setSpeeds(FORWARD_SPEED, FORWARD_SPEED);
+		
+		leftPassed = false;
+		rightPassed = false;
+		offsets = new double[2];
 		
 		// While it is navigating, update odometer and US distance
-		while (isNavigating()){
-			currentX = odometer.getX();
-			currentY = odometer.getY();
-		}
+		while (isNavigating("X"));
 		
 		
 		// Y routine
@@ -223,16 +224,14 @@ public class Navigation {
 		turn(angleToTurn);
 		
 		// Set the motors speed forward
-		leftMotor.setSpeed(FORWARD_SPEED);
-		rightMotor.setSpeed(FORWARD_SPEED);
-		leftMotor.forward();
-		rightMotor.forward();
+		setSpeeds(FORWARD_SPEED, FORWARD_SPEED);
+		
+		leftPassed = false;
+		rightPassed = false;
+		offsets = new double[2];
 		
 		// While it is navigating, update odometer and US distance
-		while (isNavigating()){
-			currentX = odometer.getX();
-			currentY = odometer.getY();
-		}
+		while (isNavigating("Y"));
 		
 	}
 	
@@ -305,40 +304,47 @@ public class Navigation {
 	 * 
 	 *  @since 1.0
 	 */
-	private boolean isNavigating(){
+	private boolean isNavigating(String axis){
+		currentX = odometer.getX();
+		currentY = odometer.getY();
+		float leftColor = getLeftColorData();
+		float rightColor = getRightColorData();
 		while (Math.abs((int) currentX - destX) > 1 || Math.abs((int) currentY - destY) > 1){
-			float leftColor = getLeftColorData();
-			float rightColor = getRightColorData();
+			setSpeeds(FORWARD_SPEED,FORWARD_SPEED);
+			if (axis.equals("X")){
+				if (leftColor < getBLACK_LINE()){
+					offsets[0] = odometer.getX();
+					leftPassed = true;
+				}
+				else if (rightColor < getBLACK_LINE()){
+					offsets[1] = odometer.getX();
+					rightPassed = true;
+				}
+			}
+			else {
+				if (leftColor < getBLACK_LINE()){
+					offsets[0] = odometer.getY();
+					leftPassed = true;
+				}
+				else if (rightColor < getBLACK_LINE()){
+					offsets[1] = odometer.getY();
+					rightPassed = true;
+				}
+			}
 			
-			if(leftColor < LightLocalizer.getBLACK_LINE() || rightColor < LightLocalizer.getBLACK_LINE())
+			// Correct angle
+			if (rightPassed == true && leftPassed == true){
+				setSpeeds(0,0);
+				correctPosition(offsets, axis);
+				leftPassed = false;
+				rightPassed = false;
+			}
 			return true;
 		}
 		// Stop the motors when on the point, set onPoint to true
 		setSpeeds(0,0);
 		onPoint = true;
 		return false;
-	}
-	
-	public void linesReading(){
-		double[] offsets = new double[2];
-		leftColor = getLeftColorData();
-		rightColor = getRightColorData();
-		boolean leftPassed = false;
-		boolean rightPassed = false;
-
-			while (leftPassed == false || rightPassed == false){
-				leftColor = getLeftColorData();
-				rightColor = getRightColorData();
-				if (leftColor < LightLocalizer.getBLACK_LINE()){
-					offsets[0] = odometer.getX();
-					leftPassed = true;
-				}
-				else if (rightColor < LightLocalizer.getBLACK_LINE()){
-					offsets[1] = odometer.getX();
-					rightPassed = true;
-				}
-			}
-		correctPosition(offsets, "X");
 	}
 	
 	
@@ -461,5 +467,9 @@ public class Navigation {
 
 	public static double getSENSOR_OFFSET() {
 		return SENSOR_OFFSET;
+	}
+
+	public double getBLACK_LINE() {
+		return BLACK_LINE;
 	}
 }
