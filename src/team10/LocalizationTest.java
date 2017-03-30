@@ -38,9 +38,9 @@ public class LocalizationTest {
 		lcdDisplay.start();
 		
 		// Do localization
-		//localization.doLocalization(initialPosition);
-		odometer.setPosition(new double [] {Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(0), 0}, new boolean [] {true, true, true});
-		navigation.travelTo(30.98, 60);
+		localization.doLocalization(initialPosition);
+		//odometer.setPosition(new double [] {Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(0), 0}, new boolean [] {true, true, true});
+		navigation.travelTo(Navigation.convertTileToDistance(2), Navigation.convertTileToDistance(2));
 		//navigation.turnTo(180, true);
 		//navigation.goForward(30.48*3);
 		//navigation.turn(Math.PI/4);

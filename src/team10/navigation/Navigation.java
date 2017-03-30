@@ -17,7 +17,7 @@ public class Navigation {
 	private static final int FORWARD_SPEED = 200;
 	private static final int ROTATE_SPEED = 100;
 	private static final int ACCELERATION = 250;
-	private static final double TILE_SIZE = 30.98;
+	private static final double TILE_SIZE = 30.48;
 	private final static double DEGREE_ERR = 1;
 	
 	static double destX, destY, distW;
@@ -196,6 +196,9 @@ public class Navigation {
 		destY = y;
 		double tetha = getAngle(currentX, currentY, x, y);
 		angleToTurn = -odometer.getTheta() + tetha;
+		if (angleToTurn < 0){
+			angleToTurn += Math.PI*2;
+		}
 		turn(angleToTurn);
 		
 		// Set the motors speed forward
@@ -221,6 +224,7 @@ public class Navigation {
 		if (tetha >= Math.PI*2){
 			tetha -= Math.PI*2;
 		}
+		
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
 		// Turn right

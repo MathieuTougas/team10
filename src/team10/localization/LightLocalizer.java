@@ -163,7 +163,7 @@ public class LightLocalizer {
 		double angle = Math.asin(diff/SENSOR_TRACK);
 		if (axis.equals("X")){
 			navigation.turn(-angle);
-			navigation.goForward(SENSOR_OFFSET-Odometer.getWheelBase()/2*Math.sin(angle));
+			navigation.goForward(SENSOR_OFFSET-Math.abs(Odometer.getWheelBase()/2*Math.sin(angle)));
 		}
 		else{
 			navigation.goForward(SENSOR_OFFSET);

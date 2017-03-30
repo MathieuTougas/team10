@@ -36,8 +36,7 @@ public class BetaDemo {
 		final Odometer odometer = new Odometer();
 		final Navigation navigation = new Navigation(odometer);
 		final StringLauncher stringLauncher = new StringLauncher();
-		final Localization localization = new Localization (odometer, navigation);
-		
+		final Localization localization = new Localization (odometer, navigation);		
 		final Display lcdDisplay = new Display (odometer);
 		
 		
