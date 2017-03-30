@@ -15,9 +15,9 @@ public class Navigation {
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
 	private Odometer odometer;
 	private static final int FORWARD_SPEED = 200;
-	private static final int ROTATE_SPEED = 150;
-	private static final int ACCELERATION = 500;
-	private static final double TILE_SIZE = 30.98;
+	private static final int ROTATE_SPEED = 100;
+	private static final int ACCELERATION = 250;
+	private static final double TILE_SIZE = 30.48;
 	private final static double DEGREE_ERR = 1;
 	
 	static double destX, destY, distW;
@@ -147,10 +147,13 @@ public class Navigation {
 	 * 
 	 *  @since 1.0
 	 */
-	public void travelTo(int x, int y){
+	/*public void travelTo(int x, int y){
 		// Turn to the desired angle
 		double tetha = getAngle(currentX, currentY, x, y);
 		tetha += odometer.getTheta();
+		if (tetha > Math.PI*2){
+			tetha -= Math.PI*2;
+		}
 		turnTo(tetha, true);
 		
 		// Set the motors speed forward
@@ -183,7 +186,7 @@ public class Navigation {
 			leftMotor.rotate(convertDistance(wheelRadius, 20), true);
 			rightMotor.rotate(convertDistance(wheelRadius, 20), false);
 		}
-	}
+	}*/
 	
 	public void travelTo(double x, double y){
 		// Turn to the desired angle
@@ -192,7 +195,10 @@ public class Navigation {
 		destX = x;
 		destY = y;
 		double tetha = getAngle(currentX, currentY, x, y);
-		angleToTurn = -odometer.getTheta() +tetha;
+		angleToTurn = -odometer.getTheta() + tetha;
+		if (angleToTurn < 0){
+			angleToTurn += Math.PI*2;
+		}
 		turn(angleToTurn);
 		
 		// Set the motors speed forward
@@ -215,9 +221,13 @@ public class Navigation {
 	 *  @since 2.0
 	 */
 	public void turn(double tetha){
+		if (tetha >= Math.PI*2){
+			tetha -= Math.PI*2;
+		}
+		
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
-		
+		// Turn right
 		leftMotor.rotate(-convertAngle(wheelRadius, width, tetha*180/Math.PI), true);
 		rightMotor.rotate(convertAngle(wheelRadius, width, tetha*180/Math.PI), false);
 	}
@@ -304,7 +314,7 @@ public class Navigation {
 		double yDiff = finalY - initialY;
 		double tetha = 0;
 		
-		if (xDiff >0){
+		if (xDiff > 0){
 			tetha = Math.atan(yDiff/xDiff);
 		}
 		else if (xDiff < 0 && yDiff > 0) {

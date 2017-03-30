@@ -7,56 +7,25 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorModes;
 import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
+import team10.navigation.Navigation;
 import team10.navigation.Odometer;
 
 public class Localization {
 	private static final Port usPort = LocalEV3.get().getPort("S4");		
-	private static final Port colorPort = LocalEV3.get().getPort("S3");	
+	private static final Port leftColorPort = LocalEV3.get().getPort("S2");	
+	private static final Port rightColorPort = LocalEV3.get().getPort("S3");	
 	private static final USLocalizer.LocalizationType localization_type = USLocalizer.LocalizationType.FALLING_EDGE;
 	private Odometer odometer;
+	private Navigation navigation;
 	
 	/**
 	 *  Constructor
 	 * 
 	 *  @since 1.0
 	 */
-	public Localization (Odometer odometer){
+	public Localization (Odometer odometer, Navigation navigation){
 		this.odometer = odometer;
-	}
-	
-	/**
-	 *  Do the localisation routine
-	 * 
-	 *  @since 1.0
-	 */
-	public void doLocalization() {
-		
-		// Setup US sensor
-		@SuppressWarnings("resource")					    	
-		SensorModes usSensor = new EV3UltrasonicSensor(usPort);
-		SampleProvider usValue = usSensor.getMode("Distance");
-		float[] usData = new float[usValue.sampleSize()];
-		
-		// Setup color sensor
-		@SuppressWarnings("resource")
-		SensorModes colorSensor = new EV3ColorSensor(colorPort);
-		SampleProvider colorValue = colorSensor.getMode("Red");
-		float[] colorData = new float[colorValue.sampleSize()];
-				
-
-		//while (Button.waitForAnyPress() != Button.ID_ENTER);
-		
-		// perform the ultrasonic localization
-		USLocalizer usl = new USLocalizer(odometer, usValue, usData, localization_type);
-		usl.doLocalization();
-		
-		//while (Button.waitForAnyPress() != Button.ID_ENTER);
-		
-		// perform the light sensor localization
-		LightLocalizer lsl = new LightLocalizer(odometer, colorValue, colorData);
-		lsl.doLocalization();		
-		
-		Sound.beep();
+		this.navigation = navigation;
 	}
 	
 	/**
@@ -75,21 +44,25 @@ public class Localization {
 		
 		// Setup color sensor
 		@SuppressWarnings("resource")
-		SensorModes colorSensor = new EV3ColorSensor(colorPort);
-		SampleProvider colorValue = colorSensor.getMode("Red");
-		float[] colorData = new float[colorValue.sampleSize()];
+		SensorModes leftColorSensor = new EV3ColorSensor(leftColorPort);
+		SampleProvider leftColorValue =leftColorSensor.getMode("Red");
+		float[] leftColorData = new float[leftColorValue.sampleSize()];
 				
-
+		// Setup color sensor
+		@SuppressWarnings("resource")
+		SensorModes rightColorSensor = new EV3ColorSensor(rightColorPort);
+		SampleProvider rightColorValue = rightColorSensor.getMode("Red");
+		float[] rightColorData = new float[rightColorValue.sampleSize()];
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		
 		// perform the ultrasonic localization
-		USLocalizer usl = new USLocalizer(odometer, usValue, usData, localization_type);
-		usl.doLocalization();
+		//USLocalizer usl = new USLocalizer(odometer, navigation, usValue, usData, localization_type);
+		//usl.doLocalization();
 		
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		
 		// perform the light sensor localization
-		LightLocalizer lsl = new LightLocalizer(odometer, colorValue, colorData);
+		LightLocalizer lsl = new LightLocalizer(odometer, navigation, leftColorValue, leftColorData, rightColorValue, rightColorData);
 		lsl.doLocalization(initialPosition);
 		
 		Sound.beep();

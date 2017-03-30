@@ -19,7 +19,7 @@ public class Odometer extends Thread {
 	private int leftMotorTachoCount, rightMotorTachoCount;
 	// Static ressources
 	private static final double WHEEL_RADIUS = 2.1;
-	private static final double WHEEL_BASE = 13.4;
+	private static final double WHEEL_BASE = 14.5;
 	private static final long ODOMETER_PERIOD = 25;
 	
 
@@ -97,7 +97,8 @@ public class Odometer extends Thread {
 				 * Do not perform complex math
 				 * 
 				 */
-				setTheta(theta + thetaAngle);
+				theta += thetaAngle;
+				setTheta(theta);
 				
 				// Correct for angles greater than 360 degrees
 				if (getTheta() > 2*Math.PI)
