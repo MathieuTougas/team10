@@ -218,14 +218,14 @@ public class Navigation {
 	 *  @since 2.0
 	 */
 	public void turn(double tetha){
-		if (tetha> Math.PI*2){
+		if (tetha >= Math.PI*2){
 			tetha -= Math.PI*2;
 		}
 		leftMotor.setSpeed(ROTATE_SPEED);
 		rightMotor.setSpeed(ROTATE_SPEED);
 		// Turn right
 		leftMotor.rotate(-convertAngle(wheelRadius, width, tetha*180/Math.PI), true);
-		rightMotor.rotate(convertAngle(wheelRadius, width, tetha*180/Math.PI), false);	
+		rightMotor.rotate(convertAngle(wheelRadius, width, tetha*180/Math.PI), false);
 	}
 	
 	/**
@@ -310,7 +310,7 @@ public class Navigation {
 		double yDiff = finalY - initialY;
 		double tetha = 0;
 		
-		if (xDiff >0){
+		if (xDiff > 0){
 			tetha = Math.atan(yDiff/xDiff);
 		}
 		else if (xDiff < 0 && yDiff > 0) {

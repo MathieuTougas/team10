@@ -97,7 +97,8 @@ public class Odometer extends Thread {
 				 * Do not perform complex math
 				 * 
 				 */
-				setTheta(theta + thetaAngle);
+				theta += thetaAngle;
+				setTheta(theta);
 				
 				// Correct for angles greater than 360 degrees
 				if (getTheta() > 2*Math.PI)

@@ -36,9 +36,9 @@ public class Main {
 		// Instantiate objects
 		final WifiConnection conn = new WifiConnection(SERVER_IP, TEAM_NUMBER, ENABLE_DEBUG_WIFI_PRINT);
 		final Odometer odometer = new Odometer();
-		final Catapult catapult = new Catapult();
-		final Localization localization = new Localization (odometer);
 		final Navigation navigation = new Navigation(odometer);
+		final Catapult catapult = new Catapult();
+		final Localization localization = new Localization (odometer, navigation);
 		final Display lcdDisplay = new Display (odometer);
 		
 		

@@ -19,6 +19,7 @@ public class USLocalizer {
 	private final int BANDWIDTH = 5;
 
 	private Odometer odo;
+	private Navigation navigation;
 	private SampleProvider usSensor;
 	private float[] usData;
 	private LocalizationType locType;
@@ -30,8 +31,9 @@ public class USLocalizer {
 	 * 
 	 * @since 1.0
 	 */
-	public USLocalizer(Odometer odo,  SampleProvider usSensor, float[] usData, LocalizationType locType) {
+	public USLocalizer(Odometer odo,  Navigation navigation, SampleProvider usSensor, float[] usData, LocalizationType locType) {
 		this.odo = odo;
+		this.navigation = navigation;
 		this.usSensor = usSensor;
 		this.usData = usData;
 	    this.locType = locType;
@@ -49,7 +51,6 @@ public class USLocalizer {
 		theta = 0;
 		
 		if (locType == LocalizationType.FALLING_EDGE) {
-			Navigation navigation = new Navigation (odo);
 			navigation.setSpeeds(turnSpeed,-turnSpeed);
 
 			// rotate the robot until it sees no wall

@@ -39,14 +39,14 @@ public class LightLocalizer {
 	 * 
 	 *  @since 1.0
 	 */
-	public LightLocalizer(Odometer odometer, SampleProvider leftColorSensor, float[] leftColorData, SampleProvider rightColorSensor, float[] rightColorData) {
+	public LightLocalizer(Odometer odometer, Navigation navigation, SampleProvider leftColorSensor, float[] leftColorData, SampleProvider rightColorSensor, float[] rightColorData) {
 		this.odometer = odometer;
 		this.leftColorSensor = leftColorSensor;
 		this.rightColorSensor = rightColorSensor;
 		this.leftColorData = leftColorData;
 		this.rightColorData = rightColorData;
 		this.forwardSpeed = Navigation.getForwardSpeed();
-		this.navigation = new Navigation (odometer);
+		this.navigation = navigation;
 		
 	}
 	

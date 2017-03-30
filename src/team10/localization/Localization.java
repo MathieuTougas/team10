@@ -7,6 +7,7 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorModes;
 import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
+import team10.navigation.Navigation;
 import team10.navigation.Odometer;
 
 public class Localization {
@@ -15,14 +16,16 @@ public class Localization {
 	private static final Port rightColorPort = LocalEV3.get().getPort("S3");	
 	private static final USLocalizer.LocalizationType localization_type = USLocalizer.LocalizationType.FALLING_EDGE;
 	private Odometer odometer;
+	private Navigation navigation;
 	
 	/**
 	 *  Constructor
 	 * 
 	 *  @since 1.0
 	 */
-	public Localization (Odometer odometer){
+	public Localization (Odometer odometer, Navigation navigation){
 		this.odometer = odometer;
+		this.navigation = navigation;
 	}
 	
 	/**
@@ -53,13 +56,13 @@ public class Localization {
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		
 		// perform the ultrasonic localization
-		USLocalizer usl = new USLocalizer(odometer, usValue, usData, localization_type);
+		USLocalizer usl = new USLocalizer(odometer, navigation, usValue, usData, localization_type);
 		usl.doLocalization();
 		
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		
 		// perform the light sensor localization
-		LightLocalizer lsl = new LightLocalizer(odometer, leftColorValue, leftColorData, rightColorValue, rightColorData);
+		LightLocalizer lsl = new LightLocalizer(odometer, navigation, leftColorValue, leftColorData, rightColorValue, rightColorData);
 		lsl.doLocalization(initialPosition);
 		
 		Sound.beep();
