@@ -12,8 +12,6 @@ import team10.navigation.Odometer;
 
 public class Localization {
 	private static final Port usPort = LocalEV3.get().getPort("S4");		
-	private static final Port leftColorPort = LocalEV3.get().getPort("S2");	
-	private static final Port rightColorPort = LocalEV3.get().getPort("S3");	
 	private static final USLocalizer.LocalizationType localization_type = USLocalizer.LocalizationType.FALLING_EDGE;
 	private Odometer odometer;
 	private Navigation navigation;
@@ -43,15 +41,11 @@ public class Localization {
 		float[] usData = new float[usValue.sampleSize()];
 		
 		// Setup color sensor
-		@SuppressWarnings("resource")
-		SensorModes leftColorSensor = new EV3ColorSensor(leftColorPort);
-		SampleProvider leftColorValue =leftColorSensor.getMode("Red");
+		SampleProvider leftColorValue = navigation.getLeftColorValue();
 		float[] leftColorData = new float[leftColorValue.sampleSize()];
 				
 		// Setup color sensor
-		@SuppressWarnings("resource")
-		SensorModes rightColorSensor = new EV3ColorSensor(rightColorPort);
-		SampleProvider rightColorValue = rightColorSensor.getMode("Red");
+		SampleProvider rightColorValue = navigation.getRightColorValue();
 		float[] rightColorData = new float[rightColorValue.sampleSize()];
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		

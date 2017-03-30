@@ -21,11 +21,9 @@ public class LightLocalizer {
 	private float[] leftColorData;	
 	private float[] rightColorData;	
 	
-	private final double BLACK_LINE = 40.0;
+	private final static double BLACK_LINE = 40.0;
 	private final double OFFSET_X = 6.5;
 	private final double OFFSET_Y = 6.5;
-	private final double SENSOR_TRACK = 11.6;
-	private final double SENSOR_OFFSET = 5.35;
 
 	public static float leftColor, rightColor;
 	public static double locX;
@@ -122,11 +120,11 @@ public class LightLocalizer {
 			while (leftPassed == false || rightPassed == false){
 				leftColor = getLeftColorData();
 				rightColor = getRightColorData();
-				if (leftColor < BLACK_LINE){
+				if (leftColor < getBLACK_LINE()){
 					offsets[0] = odometer.getX();
 					leftPassed = true;
 				}
-				else if (rightColor < BLACK_LINE){
+				else if (rightColor < getBLACK_LINE()){
 					offsets[1] = odometer.getX();
 					rightPassed = true;
 				}
@@ -136,38 +134,18 @@ public class LightLocalizer {
 			while (leftPassed == false || rightPassed == false){
 				leftColor = getLeftColorData();
 				rightColor = getRightColorData();
-				if (leftColor < BLACK_LINE){
+				if (leftColor < getBLACK_LINE()){
 					offsets[0] = odometer.getY();
 					leftPassed = true;
 				}
-				else if (rightColor < BLACK_LINE){
+				else if (rightColor < getBLACK_LINE()){
 					offsets[1] = odometer.getY();
 					rightPassed = true;
 				}
 			}
 		}
-		correctPosition(offsets, axis);
+		navigation.correctPosition(offsets, axis);
 		navigation.setSpeeds(0,0);
-	}
-	
-	/**
-	 *  Correct the robot position
-	 * 
-	 *  @since 2.0
-	 */
-	private void correctPosition(double[] positions, String axis){
-		double leftValue = positions[0];
-		double rightValue = positions[1];
-		
-		double diff = leftValue-rightValue;
-		double angle = Math.asin(diff/SENSOR_TRACK);
-		if (axis.equals("X")){
-			navigation.turn(-angle);
-			navigation.goForward(SENSOR_OFFSET-Math.abs(Odometer.getWheelBase()/2*Math.sin(angle)));
-		}
-		else{
-			navigation.goForward(SENSOR_OFFSET);
-		}
 	}
 	
 	/**
@@ -215,6 +193,10 @@ public class LightLocalizer {
 		rightColorSensor.fetchSample(rightColorData, 0);
 		float color = rightColorData[0]*100;
 		return color;
+	}
+
+	public static double getBLACK_LINE() {
+		return BLACK_LINE;
 	}
 	
 

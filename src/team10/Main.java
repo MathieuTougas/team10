@@ -2,6 +2,7 @@ package team10;
 
 import java.util.Map;
 import lejos.hardware.Button;
+import lejos.hardware.Sound;
 import team10.launcher.Catapult;
 import team10.localization.Localization;
 import team10.navigation.Display;
@@ -62,6 +63,7 @@ public class Main {
 		} 
 		// Wait for our team number to be called
 		while (fwdTeam != 10 && defTeam != 10);
+		Sound.beep();
 
 		// Forward
 		if (fwdTeam == 10) {

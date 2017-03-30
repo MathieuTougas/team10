@@ -1,7 +1,13 @@
 package team10.navigation;
 
+import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.port.Port;
+import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.SampleProvider;
+import team10.localization.LightLocalizer;
+import team10.localization.Localization;
 
 /**
  * Handles the directions calculation for the robot
@@ -14,15 +20,24 @@ import lejos.robotics.SampleProvider;
 public class Navigation {
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
 	private Odometer odometer;
+	private static final Port leftColorPort = LocalEV3.get().getPort("S2");	
+	private static final Port rightColorPort = LocalEV3.get().getPort("S3");	
 	private static final int FORWARD_SPEED = 200;
 	private static final int ROTATE_SPEED = 100;
 	private static final int ACCELERATION = 250;
 	private static final double TILE_SIZE = 30.48;
 	private final static double DEGREE_ERR = 1;
+	private final static double SENSOR_TRACK = 11.6;
+	private final static double SENSOR_OFFSET = 5.35;
+	public static float leftColor, rightColor;
 	
 	static double destX, destY, distW;
 	private double currentX, currentY, wheelRadius, width;
 	private boolean onPoint;
+	private SampleProvider leftColorValue;
+	private SampleProvider rightColorValue;
+	private float[] leftColorData;	
+	private float[] rightColorData;
 	private SampleProvider usDistance;
 	private float[] usData;
 	
@@ -41,6 +56,18 @@ public class Navigation {
 		this.width = Odometer.getWheelBase();
 		//this.usDistance = Localization.usSensor.getMode("Distance");
 		//this.usData = new float[usDistance.sampleSize()];
+		
+		// Setup color sensor
+		@SuppressWarnings("resource")
+		SensorModes leftColorSensor = new EV3ColorSensor(leftColorPort);
+		this.setLeftColorValue(leftColorSensor.getMode("Red"));
+		this.leftColorData = new float[getLeftColorValue().sampleSize()];
+				
+		// Setup color sensor
+		@SuppressWarnings("resource")
+		SensorModes rightColorSensor = new EV3ColorSensor(rightColorPort);
+		this.setRightColorValue(rightColorSensor.getMode("Red"));
+		this.rightColorData = new float[getRightColorValue().sampleSize()];
 		
 	}
 	
@@ -146,56 +173,21 @@ public class Navigation {
 	 *  Travel to the point
 	 * 
 	 *  @since 1.0
-	 */
-	/*public void travelTo(int x, int y){
-		// Turn to the desired angle
-		double tetha = getAngle(currentX, currentY, x, y);
-		tetha += odometer.getTheta();
-		if (tetha > Math.PI*2){
-			tetha -= Math.PI*2;
-		}
-		turnTo(tetha, true);
-		
-		// Set the motors speed forward
-		leftMotor.setSpeed(FORWARD_SPEED);
-		rightMotor.setSpeed(FORWARD_SPEED);
-		leftMotor.forward();
-		rightMotor.forward();
-		
-		//  boolean validating if the wall follower had been active
-		boolean wF = false;
-		
-		// While it is navigating, update odometer and US distance
-		while (isNavigating() && wF == false){
-			currentX = odometer.getX();
-			currentY = odometer.getY();
-			distW = getUsDistance(usDistance, usData);
-			
-			// When it reaches a distance of less than 25cm
-			while (distW < 25){
-				turn(Math.PI/2);
-				distW = getUsDistance(usDistance, usData);
-				wF = true;
-			}
-		}
-		
-		// If the wall follower has been active, move forward
-		if (wF == true){
-			leftMotor.setSpeed(FORWARD_SPEED);
-			rightMotor.setSpeed(FORWARD_SPEED);
-			leftMotor.rotate(convertDistance(wheelRadius, 20), true);
-			rightMotor.rotate(convertDistance(wheelRadius, 20), false);
-		}
-	}*/
-	
+	 */	
 	public void travelTo(double x, double y){
 		// Turn to the desired angle
 		currentX = odometer.getX();
 		currentY = odometer.getY();
-		destX = x;
-		destY = y;
-		double tetha = getAngle(currentX, currentY, x, y);
-		angleToTurn = -odometer.getTheta() + tetha;
+		double finalX = x;
+		double finalY = y;
+		
+		
+		destX = finalX;
+		destY = currentY;
+		
+		// X Routine
+		double tetha = getAngle(currentX, currentY, destX, destY);
+		angleToTurn = tetha - odometer.getTheta();
 		if (angleToTurn < 0){
 			angleToTurn += Math.PI*2;
 		}
@@ -212,7 +204,38 @@ public class Navigation {
 			currentX = odometer.getX();
 			currentY = odometer.getY();
 		}
+		
+		
+		// Y routine
+		destX = currentX;
+		destY = finalY;
+		
+		if (finalY - currentY > 0){
+			angleToTurn = Math.PI/2 - odometer.getTheta();
+		}
+		else {
+			angleToTurn = -Math.PI/2 - odometer.getTheta();
+		}
+		// Correct for angles smaller than 0
+		if(angleToTurn < 0){
+			angleToTurn += Math.PI*2;
+		}
+		turn(angleToTurn);
+		
+		// Set the motors speed forward
+		leftMotor.setSpeed(FORWARD_SPEED);
+		rightMotor.setSpeed(FORWARD_SPEED);
+		leftMotor.forward();
+		rightMotor.forward();
+		
+		// While it is navigating, update odometer and US distance
+		while (isNavigating()){
+			currentX = odometer.getX();
+			currentY = odometer.getY();
+		}
+		
 	}
+	
 
 	
 	/**
@@ -284,15 +307,61 @@ public class Navigation {
 	 */
 	private boolean isNavigating(){
 		while (Math.abs((int) currentX - destX) > 1 || Math.abs((int) currentY - destY) > 1){
+			float leftColor = getLeftColorData();
+			float rightColor = getRightColorData();
+			
+			if(leftColor < LightLocalizer.getBLACK_LINE() || rightColor < LightLocalizer.getBLACK_LINE())
 			return true;
 		}
 		// Stop the motors when on the point, set onPoint to true
-		leftMotor.stop();
-		rightMotor.stop();
+		setSpeeds(0,0);
 		onPoint = true;
 		return false;
 	}
 	
+	public void linesReading(){
+		double[] offsets = new double[2];
+		leftColor = getLeftColorData();
+		rightColor = getRightColorData();
+		boolean leftPassed = false;
+		boolean rightPassed = false;
+
+			while (leftPassed == false || rightPassed == false){
+				leftColor = getLeftColorData();
+				rightColor = getRightColorData();
+				if (leftColor < LightLocalizer.getBLACK_LINE()){
+					offsets[0] = odometer.getX();
+					leftPassed = true;
+				}
+				else if (rightColor < LightLocalizer.getBLACK_LINE()){
+					offsets[1] = odometer.getX();
+					rightPassed = true;
+				}
+			}
+		correctPosition(offsets, "X");
+	}
+	
+	
+	/**
+	 *  Correct the robot position
+	 * 
+	 *  @since 2.0
+	 */
+	public void correctPosition(double[] positions, String axis){
+		double leftValue = positions[0];
+		double rightValue = positions[1];
+		
+		double diff = leftValue-rightValue;
+		double angle = Math.asin(diff/getSENSOR_TRACK());
+		if (axis.equals("X")){
+			turn(-angle);
+			goForward(getSENSOR_OFFSET()-Math.abs(Odometer.getWheelBase()/2*Math.sin(angle)));
+		}
+		else{
+			goForward(getSENSOR_OFFSET());
+		}
+	}
+		
 	/**
 	 * Get the distance from the US sensor
 	 * 
@@ -346,5 +415,51 @@ public class Navigation {
 	 */
 	public static double convertTileToDistance(int tile){
 		return tile*TILE_SIZE + TILE_SIZE;
+	}
+	
+	/**
+	 *  Get data from the left color sensor
+	 * 
+	 *  @since 2.0
+	 */
+	private float getLeftColorData() {
+		getLeftColorValue().fetchSample(leftColorData, 0);
+		float color = leftColorData[0]*100;
+		return color;
+	}
+	
+	/**
+	 *  Get data from the rightcolor sensor
+	 * 
+	 *  @since 1.0
+	 */
+	private float getRightColorData() {
+		getRightColorValue().fetchSample(rightColorData, 0);
+		float color = rightColorData[0]*100;
+		return color;
+	}
+
+	public SampleProvider getRightColorValue() {
+		return rightColorValue;
+	}
+	
+	public void setRightColorValue(SampleProvider rightColorValue) {
+		this.rightColorValue = rightColorValue;
+	}
+
+	public SampleProvider getLeftColorValue() {
+		return leftColorValue;
+	}
+
+	public void setLeftColorValue(SampleProvider leftColorValue) {
+		this.leftColorValue = leftColorValue;
+	}
+
+	public static double getSENSOR_TRACK() {
+		return SENSOR_TRACK;
+	}
+
+	public static double getSENSOR_OFFSET() {
+		return SENSOR_OFFSET;
 	}
 }
