@@ -55,9 +55,11 @@ public class Localization {
 		float[] rightColorData = new float[rightColorValue.sampleSize()];
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		
+		Sound.beep();
+		
 		// perform the ultrasonic localization
-		//USLocalizer usl = new USLocalizer(odometer, navigation, usValue, usData, localization_type);
-		//usl.doLocalization();
+		USLocalizer usl = new USLocalizer(odometer, navigation, usValue, usData, localization_type);
+		usl.doLocalization();
 		
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		
