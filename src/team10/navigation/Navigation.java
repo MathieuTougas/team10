@@ -142,51 +142,7 @@ public class Navigation {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
 	
-	/**
-	 *  Travel to the point
-	 * 
-	 *  @since 1.0
-	 */
-	/*public void travelTo(int x, int y){
-		// Turn to the desired angle
-		double tetha = getAngle(currentX, currentY, x, y);
-		tetha += odometer.getTheta();
-		if (tetha > Math.PI*2){
-			tetha -= Math.PI*2;
-		}
-		turnTo(tetha, true);
-		
-		// Set the motors speed forward
-		leftMotor.setSpeed(FORWARD_SPEED);
-		rightMotor.setSpeed(FORWARD_SPEED);
-		leftMotor.forward();
-		rightMotor.forward();
-		
-		//  boolean validating if the wall follower had been active
-		boolean wF = false;
-		
-		// While it is navigating, update odometer and US distance
-		while (isNavigating() && wF == false){
-			currentX = odometer.getX();
-			currentY = odometer.getY();
-			distW = getUsDistance(usDistance, usData);
-			
-			// When it reaches a distance of less than 25cm
-			while (distW < 25){
-				turn(Math.PI/2);
-				distW = getUsDistance(usDistance, usData);
-				wF = true;
-			}
-		}
-		
-		// If the wall follower has been active, move forward
-		if (wF == true){
-			leftMotor.setSpeed(FORWARD_SPEED);
-			rightMotor.setSpeed(FORWARD_SPEED);
-			leftMotor.rotate(convertDistance(wheelRadius, 20), true);
-			rightMotor.rotate(convertDistance(wheelRadius, 20), false);
-		}
-	}*/
+
 	
 	public void travelTo(double x, double y){
 		// Turn to the desired angle
@@ -195,17 +151,11 @@ public class Navigation {
 		destX = x;
 		destY = y;
 		double tetha = getAngle(currentX, currentY, x, y);
-		angleToTurn = -odometer.getTheta() + tetha;
-		if (angleToTurn < 0){
-			angleToTurn += Math.PI*2;
-		}
+		angleToTurn = tetha - odometer.getTheta();
 		turn(angleToTurn);
 		
 		// Set the motors speed forward
-		leftMotor.setSpeed(FORWARD_SPEED);
-		rightMotor.setSpeed(FORWARD_SPEED);
-		leftMotor.forward();
-		rightMotor.forward();
+		setSpeeds(FORWARD_SPEED, FORWARD_SPEED);
 		
 		// While it is navigating, update odometer and US distance
 		while (isNavigating()){
@@ -221,8 +171,11 @@ public class Navigation {
 	 *  @since 2.0
 	 */
 	public void turn(double tetha){
-		if (tetha >= Math.PI*2){
+		if (tetha > Math.PI){
 			tetha -= Math.PI*2;
+		}
+		else if (tetha < -Math.PI){
+			tetha += Math.PI*2;
 		}
 		
 		leftMotor.setSpeed(ROTATE_SPEED);
@@ -287,8 +240,7 @@ public class Navigation {
 			return true;
 		}
 		// Stop the motors when on the point, set onPoint to true
-		leftMotor.stop();
-		rightMotor.stop();
+		setSpeeds(0,0);
 		onPoint = true;
 		return false;
 	}
