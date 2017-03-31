@@ -135,9 +135,6 @@ public class Navigation {
 		// X Routine
 		double tetha = getAngle(currentX, currentY, destX, destY);
 		angleToTurn = tetha - odometer.getTheta();
-		if (angleToTurn < 0){
-			angleToTurn += Math.PI*2;
-		}
 		turn(angleToTurn);
 		
 		// Set the motors speed forward
@@ -161,10 +158,6 @@ public class Navigation {
 		else {
 			angleToTurn = -Math.PI/2 - odometer.getTheta();
 		}
-		// Correct for angles smaller than 0
-		if(angleToTurn < 0){
-			angleToTurn += Math.PI*2;
-		}
 		turn(angleToTurn);
 		
 		// Set the motors speed forward
@@ -187,8 +180,11 @@ public class Navigation {
 	 *  @since 2.0
 	 */
 	public void turn(double tetha){
-		if (tetha >= Math.PI*2){
+		if (tetha > Math.PI){
 			tetha -= Math.PI*2;
+		}
+		else if (tetha < -Math.PI){
+			tetha += Math.PI*2;
 		}
 		
 		leftMotor.setSpeed(ROTATE_SPEED);
