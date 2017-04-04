@@ -67,6 +67,7 @@ public class USLocalizer {
 			angleA = odo.getTheta()*180/Math.PI;
 			
 			// switch direction and wait until it sees no wall
+			navigation.turn(Math.PI/4);
 			navigation.setSpeeds(-turnSpeed,turnSpeed);
 			turnUntilNoWall();
 			

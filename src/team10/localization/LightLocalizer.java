@@ -90,13 +90,13 @@ public class LightLocalizer {
 		locY = 0;
 		
 		// Get the x-axis value for the line, back up to original position
-		runUntilLine("X");
+		runUntilLine("X", false);
 		// Turn to 90 and run
 		odometer.setPosition(new double [] {0.0, 0.0, 0}, new boolean [] {true, true, true});
 		navigation.turnTo(90, true);
 		
 		// Get the y-axis value for the line
-		runUntilLine("Y");
+		runUntilLine("Y", false);
 		
 		// Travel to the zero-zero point
 		navigation.turnTo(0, true);
@@ -110,7 +110,7 @@ public class LightLocalizer {
 	 * 
 	 *  @since 2.0
 	 */
-	private void runUntilLine(String axis){
+	void runUntilLine(String axis, boolean inversed){
 		double[] offsets = new double[2];
 		navigation.setSpeeds(forwardSpeed,forwardSpeed);
 		leftColor = getLeftColorData();
@@ -146,7 +146,7 @@ public class LightLocalizer {
 				}
 			}
 		}
-		correctPosition(offsets, axis);
+		correctPosition(offsets, axis, inversed);
 		navigation.setSpeeds(0,0);
 	}
 	
@@ -155,12 +155,15 @@ public class LightLocalizer {
 	 * 
 	 *  @since 2.0
 	 */
-	private void correctPosition(double[] positions, String axis){
+	private void correctPosition(double[] positions, String axis, boolean inversed){
 		double leftValue = positions[0];
 		double rightValue = positions[1];
 		
 		double diff = leftValue-rightValue;
 		double angle = Math.asin(diff/SENSOR_TRACK);
+		if (inversed == true){
+			angle = -angle;
+		}
 		if (axis.equals("X")){
 			navigation.turn(-angle);
 			navigation.goForward(SENSOR_OFFSET-Math.abs(Odometer.getWheelBase()/2*Math.sin(angle)));

@@ -14,6 +14,7 @@ public class Localization {
 	private static final Port usPort = LocalEV3.get().getPort("S4");		
 	private static final Port leftColorPort = LocalEV3.get().getPort("S2");	
 	private static final Port rightColorPort = LocalEV3.get().getPort("S3");	
+	SampleProvider leftColorValue, rightColorValue;
 	private static final USLocalizer.LocalizationType localization_type = USLocalizer.LocalizationType.FALLING_EDGE;
 	private Odometer odometer;
 	private Navigation navigation;
@@ -45,13 +46,13 @@ public class Localization {
 		// Setup color sensor
 		@SuppressWarnings("resource")
 		SensorModes leftColorSensor = new EV3ColorSensor(leftColorPort);
-		SampleProvider leftColorValue =leftColorSensor.getMode("Red");
+		leftColorValue =leftColorSensor.getMode("Red");
 		float[] leftColorData = new float[leftColorValue.sampleSize()];
 				
 		// Setup color sensor
 		@SuppressWarnings("resource")
 		SensorModes rightColorSensor = new EV3ColorSensor(rightColorPort);
-		SampleProvider rightColorValue = rightColorSensor.getMode("Red");
+		rightColorValue = rightColorSensor.getMode("Red");
 		float[] rightColorData = new float[rightColorValue.sampleSize()];
 		//while (Button.waitForAnyPress() != Button.ID_ENTER);
 		
@@ -68,5 +69,21 @@ public class Localization {
 		lsl.doLocalization(initialPosition);
 		
 		Sound.beep();
+	}
+	
+	public void correctBeforeShort(){
+		// Setup color sensor
+				float[] leftColorData = new float[leftColorValue.sampleSize()];
+						
+				// Setup color sensors
+				float[] rightColorData = new float[rightColorValue.sampleSize()];
+				//while (Button.waitForAnyPress() != Button.ID_ENTER);
+				
+				//while (Button.waitForAnyPress() != Button.ID_ENTER);
+				
+				// perform the light sensor localization
+				LightLocalizer lsl = new LightLocalizer(odometer, navigation, leftColorValue, leftColorData, rightColorValue, rightColorData);
+				lsl.runUntilLine("Y", true);
+		
 	}
 }

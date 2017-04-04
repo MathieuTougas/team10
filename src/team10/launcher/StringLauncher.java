@@ -18,6 +18,7 @@ public class StringLauncher {
 	private static final int RELEASE_SPEED = 4000;
 	private static final int PULL_SPEED = 300;
 	public static double angle;
+	public static boolean catapultLowered;
 	
 	/**
 	 *  Constructor
@@ -25,6 +26,7 @@ public class StringLauncher {
 	 *  @since 2.0
 	 */
 	public StringLauncher (){
+		catapultLowered = false;
 	}
 	
 	/**
@@ -33,6 +35,19 @@ public class StringLauncher {
 	 *  @since 2.0
 	 */
 	public void fire() {
+		if (catapultLowered == true){
+			// Fire the catapult
+			releaseMotor.setSpeed(RELEASE_SPEED);
+			releaseMotor.rotate(90, false);
+		}
+	}
+	
+	/**
+	 *  Lower the catapult
+	 * 
+	 *  @since 2.0
+	 */
+	public void lowerCatapult() {
 		// reset the firing motors
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { pullMotor, releaseMotor}) {
 			motor.stop();
@@ -41,20 +56,18 @@ public class StringLauncher {
 		
 		// Pull back the string
 		pullMotor.setSpeed(PULL_SPEED);
-		pullMotor.rotate(-360*6, false);
-		Navigation.wait(1.0);
+		pullMotor.rotate(300*4, false);
+		Navigation.wait(0.5);
 		
 		// Activate the hook
 		releaseMotor.setSpeed(PULL_SPEED);
 		releaseMotor.rotate(-90, false);
-		Navigation.wait(1.0);
+		Navigation.wait(0.5);
 		
 		// Unwind the string
-		pullMotor.rotate(360*6, false);
+		pullMotor.rotate(-300*4, false);
 		
-		// Fire the catapult
-		releaseMotor.setSpeed(RELEASE_SPEED);
-		releaseMotor.rotate(90, false);
+		catapultLowered = true;
 	}
 	
 }

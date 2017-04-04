@@ -15,7 +15,7 @@ public class Navigation {
 	private EV3LargeRegulatedMotor leftMotor, rightMotor;
 	private Odometer odometer;
 	private static final int FORWARD_SPEED = 200;
-	private static final int ROTATE_SPEED = 100;
+	private static final int ROTATE_SPEED = 125;
 	private static final int ACCELERATION = 250;
 	private static final double TILE_SIZE = 30.48;
 	private final static double DEGREE_ERR = 1;
@@ -184,6 +184,16 @@ public class Navigation {
 		leftMotor.rotate(-convertAngle(wheelRadius, width, tetha*180/Math.PI), true);
 		rightMotor.rotate(convertAngle(wheelRadius, width, tetha*180/Math.PI), false);
 	}
+	
+	/**
+	 *  Turn to the desired angle (rads)
+	 * 
+	 *  @since 2.0
+	 */
+	public void turnTo(double tetha){
+		angleToTurn = tetha - odometer.getTheta();
+		turn(angleToTurn);
+;	}
 	
 	/**
 	 *  Turn to desired angle, relative to xy plane
