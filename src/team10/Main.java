@@ -82,19 +82,18 @@ public class Main {
 					yDest += 1;
 					break;
 				case "E":
-					yDest += 1;
+					xDest += 1;
 					break;
 				case "S":
 					yDest -= 1;
 					break;
 				case "W":
-					yDest -= 1;
+					xDest -= 1;
 					break;	
 				}
 				
 				// Go the the middle of the field
-				navigation.travelTo(Navigation.convertTileToDistance(2), Navigation.convertTileToDistance(2));
-				navigation.travelTo(Navigation.convertTileToDistance(4), Navigation.convertTileToDistance(4));
+				navigation.travelTo((Math.abs(initialPosition[0] - Navigation.convertTileToDistance(3))), Math.abs(initialPosition[1] - Navigation.convertTileToDistance(3)));
 				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(5));
 				
 				// Shooting loop
@@ -119,7 +118,7 @@ public class Main {
 					
 					// Back off and go to shooting line
 					navigation.goForward(-10);
-					navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(7));
+					navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(2));
 					navigation.turn(Math.PI/2 - odometer.getTheta());
 					navigation.turn(Math.PI);
 					localization.correctBeforeShort();
