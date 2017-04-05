@@ -73,17 +73,14 @@ public class Localization {
 	
 	public void correctBeforeShort(){
 		// Setup color sensor
-				float[] leftColorData = new float[leftColorValue.sampleSize()];
-						
-				// Setup color sensors
-				float[] rightColorData = new float[rightColorValue.sampleSize()];
-				//while (Button.waitForAnyPress() != Button.ID_ENTER);
+		float[] leftColorData = new float[leftColorValue.sampleSize()];
 				
-				//while (Button.waitForAnyPress() != Button.ID_ENTER);
-				
-				// perform the light sensor localization
-				LightLocalizer lsl = new LightLocalizer(odometer, navigation, leftColorValue, leftColorData, rightColorValue, rightColorData);
-				lsl.runUntilLine("Y", true);
+		// Setup color sensors
+		float[] rightColorData = new float[rightColorValue.sampleSize()];
+		navigation.goForward(15);
 		
+		// perform the light sensor localization
+		LightLocalizer lsl = new LightLocalizer(odometer, navigation, leftColorValue, leftColorData, rightColorValue, rightColorData);
+	    lsl.runUntilLine("Y", true);	
 	}
 }

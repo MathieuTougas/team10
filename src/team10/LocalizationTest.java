@@ -4,7 +4,7 @@ import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import team10.launcher.StringLauncher;
 import team10.localization.Localization;
-import team10.navigation.Display;
+//import team10.navigation.Display;
 import team10.navigation.Navigation;
 import team10.navigation.Odometer;
 
@@ -26,7 +26,7 @@ public class LocalizationTest {
 		final Odometer odometer = new Odometer();
 		final Navigation navigation = new Navigation(odometer);
 		final Localization localization = new Localization (odometer, navigation);
-		final Display lcdDisplay = new Display (odometer);
+		//final Display lcdDisplay = new Display (odometer);
 		final StringLauncher stringLauncher = new StringLauncher();
 		
 		int fwd_corner = 1;
@@ -36,14 +36,15 @@ public class LocalizationTest {
 		
 		// Start odometry
 		odometer.start();
-		lcdDisplay.start();
+		//lcdDisplay.start();
 		
 		// Do localization
-		localization.doLocalization(initialPosition);
+		//localization.doLocalization(initialPosition);
 		//odometer.setPosition(new double [] {Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(0), 0}, new boolean [] {true, true, true});
-		navigation.travelTo(Navigation.convertTileToDistance(2), Navigation.convertTileToDistance(2));
-		
-		for(int i=0; i<4; i++){
+		//navigation.travelTo(Navigation.convertTileToDistance(2), Navigation.convertTileToDistance(2));
+		navigation.turn(Math.PI);
+		navigation.turn(Math.PI);
+		/*for(int i=0; i<4; i++){
 			stringLauncher.lowerCatapult();
 			navigation.travelTo(Navigation.convertTileToDistance(2), Navigation.convertTileToDistance(0));
 			navigation.travelTo(Navigation.convertTileToDistance(2), 20);
@@ -54,10 +55,9 @@ public class LocalizationTest {
 			navigation.travelTo(Navigation.convertTileToDistance(4), Navigation.convertTileToDistance(1));
 			navigation.turn(Math.PI/2 - odometer.getTheta());
 			navigation.turn(Math.PI);
-			navigation.goForward(15);
-			localization.correctBeforeShort();
+			//localization.correctBeforeShort();
 			stringLauncher.fire();
-		}
+		}*/
 		
 		//navigation.turnTo(180, true);
 		//navigation.goForward(30.48*3);

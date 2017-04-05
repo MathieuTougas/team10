@@ -2,14 +2,13 @@ package team10;
 
 import java.util.Map;
 import lejos.hardware.Button;
-import team10.launcher.Catapult;
+import lejos.hardware.Sound;
+import team10.launcher.StringLauncher;
 import team10.localization.Localization;
-import team10.navigation.Display;
 import team10.navigation.Navigation;
 import team10.navigation.Odometer;
 import team10.wifi.WifiConnection;
 
-// TODO Fix Odometry tile corrections
 // TODO Add filtering for light sensor
 /**
  * Main class for robot control
@@ -25,7 +24,7 @@ public class Main {
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
 	
 	// NAVIGATION
-	private static final double [][] CORNERS = {{-0.0, 0.0, 0.0},{Navigation.convertTileToDistance(10), 0.0, Odometer.getRadAngle(90.0)}, {Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(10), Odometer.getRadAngle(180.0)}, {0.0, Navigation.convertTileToDistance(10), Odometer.getRadAngle(270.0)}};
+	private static final double [][] CORNERS = {{Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(0), 0.0},{Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(0), Odometer.getRadAngle(90.0)}, {Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(10), Odometer.getRadAngle(180.0)}, {Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(10), Odometer.getRadAngle(270.0)}};
 	
 	private static Map data;
 
@@ -37,9 +36,9 @@ public class Main {
 		final WifiConnection conn = new WifiConnection(SERVER_IP, TEAM_NUMBER, ENABLE_DEBUG_WIFI_PRINT);
 		final Odometer odometer = new Odometer();
 		final Navigation navigation = new Navigation(odometer);
-		final Catapult catapult = new Catapult();
+		final StringLauncher stringLauncher = new StringLauncher();
 		final Localization localization = new Localization (odometer, navigation);
-		final Display lcdDisplay = new Display (odometer);
+		//final Display lcdDisplay = new Display (odometer);
 		
 		
 		// Get data
@@ -57,14 +56,14 @@ public class Main {
 		
 		do {
 			// Clear display
-			lcdDisplay.clear();
+			//lcdDisplay.clear();
 			
 		} 
 		// Wait for our team number to be called
-		while (fwdTeam != 10 && defTeam != 10);
+		while (fwdTeam != TEAM_NUMBER && defTeam != TEAM_NUMBER);
 
 		// Forward
-		if (fwdTeam == 10) {
+		if (fwdTeam == TEAM_NUMBER) {
 			// Get data
 			int fwd_corner = ((Long) data.get("FWD_CORNER")).intValue();
 			int fwd_line = ((Long) data.get("d1")).intValue();
@@ -72,6 +71,7 @@ public class Main {
 			int disp_y = ((Long) data.get("by")).intValue();
 			String disp_orientation = (String) data.get("omega");
 			double [] initialPosition = CORNERS[fwd_corner-1];
+			int i = 0;
 			
 			int xDest = disp_x;
 			int yDest = disp_y;
@@ -79,7 +79,7 @@ public class Main {
 			
 			// Start odometry
 			odometer.start();
-			lcdDisplay.start();
+			//lcdDisplay.start();
 			
 			// Do localization
 			localization.doLocalization(initialPosition);
@@ -100,29 +100,42 @@ public class Main {
 				break;	
 			}
 			
-			// Go in front of the ball dispenser
-			navigation.travelTo(Navigation.convertTileToDistance(xDest), Navigation.convertTileToDistance(yDest));
+			// Go the the middle of the field
+			navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(5));
 			
-			// Go to the ball dispenser
-			navigation.travelTo(Navigation.convertTileToDistance(disp_x), Navigation.convertTileToDistance(disp_y));
-			
-			// Wait
-			Navigation.wait(1.0);
-			
-			// Go to the ball dispenser
-			navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(fwd_line));
-			
-			// spawn a new Thread
-			(new Thread() {
-				public void run() {
-					// Fire the catapult
-					catapult.fire();
+			// Shooting loop
+			while (i < 1){
+				// Lower Catapult
+				stringLauncher.lowerCatapult();
+				
+				// Go in front of the ball dispenser
+				navigation.travelTo(Navigation.convertTileToDistance(xDest), Navigation.convertTileToDistance(yDest));
+				
+				// Go to the ball dispenser
+				if (disp_orientation.equals("N") || disp_orientation.equals("S")){
+					navigation.travelTo(Navigation.convertTileToDistance(disp_x), Navigation.convertTileToDistance(disp_y)-10);
 				}
-			}).start();
+				else {
+					navigation.travelTo(Navigation.convertTileToDistance(disp_x)-10, Navigation.convertTileToDistance(disp_y));
+
+				}
+				// Beep to obtain ball
+				Sound.beep();
+				Navigation.wait(5.0);
+				
+				// Back off and go to shooting line
+				navigation.goForward(-10);
+				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(7));
+				navigation.turn(Math.PI/2 - odometer.getTheta());
+				navigation.turn(Math.PI);
+				localization.correctBeforeShort();
+				stringLauncher.fire();
+			}
+
 		}
 		
 		// Defender
-		else if (defTeam == 10){
+		else if (defTeam == TEAM_NUMBER){
 			// Get data
 			int def_corner = ((Long) data.get("DEF_CORNER")).intValue();
 			int def_zone_x = ((Long) data.get("w1")).intValue();
@@ -131,12 +144,19 @@ public class Main {
 
 			
 			odometer.start();
-			lcdDisplay.start();
-
+			//lcdDisplay.start();
+			
+			// Do localization
+			localization.doLocalization(initialPosition);
+			
+			// Go the the middle of the field
+			navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(5));
+			
+			// Go in front of the ball dispenser
+			navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(def_zone_y));
 		} 
 		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
-		catapult.disengageStabilizers();
 		System.exit(0);
 	}
 }

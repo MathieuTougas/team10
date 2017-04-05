@@ -19,7 +19,7 @@ public class Odometer extends Thread {
 	private int leftMotorTachoCount, rightMotorTachoCount;
 	// Static ressources
 	private static final double WHEEL_RADIUS = 2.1;
-	private static final double WHEEL_BASE = 14.5;
+	private static final double WHEEL_BASE = 14.43;
 	private static final long ODOMETER_PERIOD = 25;
 	
 

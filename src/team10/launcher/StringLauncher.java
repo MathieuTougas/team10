@@ -56,7 +56,7 @@ public class StringLauncher {
 		
 		// Pull back the string
 		pullMotor.setSpeed(PULL_SPEED);
-		pullMotor.rotate(300*4, false);
+		pullMotor.rotate(2*360, false);
 		Navigation.wait(0.5);
 		
 		// Activate the hook
@@ -65,7 +65,7 @@ public class StringLauncher {
 		Navigation.wait(0.5);
 		
 		// Unwind the string
-		pullMotor.rotate(-300*4, false);
+		pullMotor.rotate(-360*2, false);
 		
 		catapultLowered = true;
 	}
