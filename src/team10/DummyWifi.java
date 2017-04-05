@@ -16,8 +16,8 @@ import team10.wifi.WifiConnection;
  */
 public class DummyWifi {
 	// WIFI
-	private static final String SERVER_IP = "192.168.2.38";
-	private static final int TEAM_NUMBER = 9;
+	private static final String SERVER_IP = "192.168.2.9";
+	private static final int TEAM_NUMBER = 1;
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
 	
 	// NAVIGATION

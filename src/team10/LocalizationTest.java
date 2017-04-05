@@ -20,7 +20,7 @@ public class LocalizationTest {
 
 	private static final double [][] CORNERS = {{Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(0), 0.0},{Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(0), Odometer.getRadAngle(90.0)}, {Navigation.convertTileToDistance(10), Navigation.convertTileToDistance(10), Odometer.getRadAngle(180.0)}, {Navigation.convertTileToDistance(0), Navigation.convertTileToDistance(10), Odometer.getRadAngle(270.0)}};
 	
-	public static void main(String[] args) {
+	public static void FinalMain(String[] args) {
 
 		// Instantiate objects
 		final Odometer odometer = new Odometer();

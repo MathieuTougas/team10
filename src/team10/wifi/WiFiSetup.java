@@ -25,7 +25,7 @@ public class WiFiSetup {
 	 * 
 	 * 2. TEAM_NUMBER: your project team number
 	 */
-	private static final String SERVER_IP = "192.168.2.38";
+	private static final String SERVER_IP = "192.168.2.9";
 	private static final int TEAM_NUMBER = 10;
 
 	// Enable/disable printing of debug info from the WiFi class

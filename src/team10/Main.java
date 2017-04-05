@@ -19,7 +19,7 @@ import team10.wifi.WifiConnection;
  */
 public class Main {
 	// WIFI
-	private static final String SERVER_IP = "192.168.2.38";
+	private static final String SERVER_IP = "192.168.2.3";
 	private static final int TEAM_NUMBER = 10;
 	private static final boolean ENABLE_DEBUG_WIFI_PRINT = true;
 	
@@ -50,113 +50,110 @@ public class Main {
 			// Get team numbers
 			fwdTeam = ((Long) data.get("FWD_TEAM")).intValue();
 			defTeam = ((Long) data.get("DEF_TEAM")).intValue();
-		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
-		}
-		
-		do {
-			// Clear display
-			//lcdDisplay.clear();
 			
-		} 
-		// Wait for our team number to be called
-		while (fwdTeam != TEAM_NUMBER && defTeam != TEAM_NUMBER);
+			// Wait for our team number to be called
+			while (fwdTeam != TEAM_NUMBER && defTeam != TEAM_NUMBER);
 
-		// Forward
-		if (fwdTeam == TEAM_NUMBER) {
-			// Get data
-			int fwd_corner = ((Long) data.get("FWD_CORNER")).intValue();
-			int fwd_line = ((Long) data.get("d1")).intValue();
-			int disp_x = ((Long) data.get("bx")).intValue();
-			int disp_y = ((Long) data.get("by")).intValue();
-			String disp_orientation = (String) data.get("omega");
-			double [] initialPosition = CORNERS[fwd_corner-1];
-			int i = 0;
-			
-			int xDest = disp_x;
-			int yDest = disp_y;
-			
-			
-			// Start odometry
-			odometer.start();
-			//lcdDisplay.start();
-			
-			// Do localization
-			localization.doLocalization(initialPosition);
-			
-			// Go to Ball dispenser
-			switch (disp_orientation){
-			case "N":
-				yDest += 1;
-				break;
-			case "E":
-				yDest += 1;
-				break;
-			case "S":
-				yDest -= 1;
-				break;
-			case "W":
-				yDest -= 1;
-				break;	
+			// Forward
+			if (fwdTeam == TEAM_NUMBER) {
+				// Get data
+				int fwd_corner = ((Long) data.get("FWD_CORNER")).intValue();
+				int fwd_line = ((Long) data.get("d1")).intValue();
+				int disp_x = ((Long) data.get("bx")).intValue();
+				int disp_y = ((Long) data.get("by")).intValue();
+				String disp_orientation = (String) data.get("omega");
+				double [] initialPosition = CORNERS[fwd_corner-1];
+				int i = 0;
+				
+				int xDest = disp_x;
+				int yDest = disp_y;
+				
+				
+				// Start odometry
+				odometer.start();
+				//lcdDisplay.start();
+				
+				// Do localization
+				localization.doLocalization(initialPosition);
+				
+				// Go to Ball dispenser
+				switch (disp_orientation){
+				case "N":
+					yDest += 1;
+					break;
+				case "E":
+					yDest += 1;
+					break;
+				case "S":
+					yDest -= 1;
+					break;
+				case "W":
+					yDest -= 1;
+					break;	
+				}
+				
+				// Go the the middle of the field
+				navigation.travelTo(Navigation.convertTileToDistance(2), Navigation.convertTileToDistance(2));
+				navigation.travelTo(Navigation.convertTileToDistance(4), Navigation.convertTileToDistance(4));
+				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(5));
+				
+				// Shooting loop
+				while (i < 1){
+					// Lower Catapult
+					stringLauncher.lowerCatapult();
+					
+					// Go in front of the ball dispenser
+					navigation.travelTo(Navigation.convertTileToDistance(xDest), Navigation.convertTileToDistance(yDest));
+					
+					// Go to the ball dispenser
+					if (disp_orientation.equals("N") || disp_orientation.equals("S")){
+						navigation.travelTo(Navigation.convertTileToDistance(disp_x), Navigation.convertTileToDistance(disp_y)-10);
+					}
+					else {
+						navigation.travelTo(Navigation.convertTileToDistance(disp_x)-10, Navigation.convertTileToDistance(disp_y));
+
+					}
+					// Beep to obtain ball
+					Sound.beep();
+					Navigation.wait(5.0);
+					
+					// Back off and go to shooting line
+					navigation.goForward(-10);
+					navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(7));
+					navigation.turn(Math.PI/2 - odometer.getTheta());
+					navigation.turn(Math.PI);
+					localization.correctBeforeShort();
+					stringLauncher.fire();
+				}
+
 			}
 			
-			// Go the the middle of the field
-			navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(5));
-			
-			// Shooting loop
-			while (i < 1){
-				// Lower Catapult
-				stringLauncher.lowerCatapult();
+			// Defender
+			else if (defTeam == TEAM_NUMBER){
+				// Get data
+				int def_corner = ((Long) data.get("DEF_CORNER")).intValue();
+				int def_zone_x = ((Long) data.get("w1")).intValue();
+				int def_zone_y = ((Long) data.get("w2")).intValue();
+				double [] initialPosition = CORNERS[def_corner-1];
+
+				
+				odometer.start();
+				//lcdDisplay.start();
+				
+				// Do localization
+				localization.doLocalization(initialPosition);
+				
+				// Go the the middle of the field
+				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(5));
 				
 				// Go in front of the ball dispenser
-				navigation.travelTo(Navigation.convertTileToDistance(xDest), Navigation.convertTileToDistance(yDest));
-				
-				// Go to the ball dispenser
-				if (disp_orientation.equals("N") || disp_orientation.equals("S")){
-					navigation.travelTo(Navigation.convertTileToDistance(disp_x), Navigation.convertTileToDistance(disp_y)-10);
-				}
-				else {
-					navigation.travelTo(Navigation.convertTileToDistance(disp_x)-10, Navigation.convertTileToDistance(disp_y));
-
-				}
-				// Beep to obtain ball
-				Sound.beep();
-				Navigation.wait(5.0);
-				
-				// Back off and go to shooting line
-				navigation.goForward(-10);
-				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(7));
-				navigation.turn(Math.PI/2 - odometer.getTheta());
-				navigation.turn(Math.PI);
-				localization.correctBeforeShort();
-				stringLauncher.fire();
+				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(def_zone_y-1));
 			}
-
-		}
-		
-		// Defender
-		else if (defTeam == TEAM_NUMBER){
-			// Get data
-			int def_corner = ((Long) data.get("DEF_CORNER")).intValue();
-			int def_zone_x = ((Long) data.get("w1")).intValue();
-			int def_zone_y = ((Long) data.get("w2")).intValue();
-			double [] initialPosition = CORNERS[def_corner-1];
-
 			
-			odometer.start();
-			//lcdDisplay.start();
-			
-			// Do localization
-			localization.doLocalization(initialPosition);
-			
-			// Go the the middle of the field
-			navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(5));
-			
-			// Go in front of the ball dispenser
-			navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(def_zone_y));
+			while (Button.waitForAnyPress() != Button.ID_ESCAPE);
+			System.exit(0);
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
 		} 
-		
-		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
-		System.exit(0);
 	}
 }

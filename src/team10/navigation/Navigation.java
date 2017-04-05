@@ -246,7 +246,7 @@ public class Navigation {
 	 *  @since 1.0
 	 */
 	private boolean isNavigating(){
-		while (Math.abs((int) currentX - destX) > 1 || Math.abs((int) currentY - destY) > 1){
+		while (Math.abs((int) currentX - destX) > 2 || Math.abs((int) currentY - destY) > 2){
 			return true;
 		}
 		// Stop the motors when on the point, set onPoint to true
