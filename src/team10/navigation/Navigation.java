@@ -22,7 +22,7 @@ public class Navigation {
 	
 	static double destX, destY, distW;
 	private double currentX, currentY, wheelRadius, width;
-	private boolean onPoint;
+	private boolean onPoint, passed;
 	private SampleProvider usDistance;
 	private float[] usData;
 	
@@ -155,12 +155,18 @@ public class Navigation {
 		turn(angleToTurn);
 		
 		// Set the motors speed forward
+		passed = false;
+		onPoint = false;
 		setSpeeds(FORWARD_SPEED, FORWARD_SPEED);
 		
 		// While it is navigating, update odometer and US distance
 		while (isNavigating()){
 			currentX = odometer.getX();
 			currentY = odometer.getY();
+		}
+		
+		if (onPoint == false){
+			travelTo(destX, destY);
 		}
 	}
 
@@ -246,7 +252,14 @@ public class Navigation {
 	 *  @since 1.0
 	 */
 	private boolean isNavigating(){
-		while (Math.abs((int) currentX - destX) > 2 || Math.abs((int) currentY - destY) > 2){
+		while (Math.abs((int) currentX - destX) > 1 || Math.abs((int) currentY - destY) > 1){
+			if (Math.abs((int) currentX - destX) < 10 && Math.abs((int) currentY - destY) < 10){
+				passed = true;
+			}
+			if (Math.abs((int) currentX - destX) > 10 && Math.abs((int) currentY - destY) > 10 && passed == true ){
+				setSpeeds(0,0);
+				return false;
+			}
 			return true;
 		}
 		// Stop the motors when on the point, set onPoint to true
