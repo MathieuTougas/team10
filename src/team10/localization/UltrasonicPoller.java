@@ -9,32 +9,31 @@ import lejos.robotics.SampleProvider;
  * @version 1.0
  * 
  */
-
-//
-//  Control of the wall follower is applied periodically by the 
-//  UltrasonicPoller thread.  The while loop at the bottom executes
-//  in a loop.  Assuming that the us.fetchSample, and cont.processUSData
-//  methods operate in about 20mS, and that the thread sleeps for
-//  50 mS at the end of each loop, then one cycle through the loop
-//  is approximately 70 mS.  This corresponds to a sampling rate
-//  of 1/70mS or about 14 Hz.
-//
-
-
 public class UltrasonicPoller extends Thread{
 	private SampleProvider us;
 	private PController cont;
 	private float[] usData;
 	
+	/**
+	 *  Constructor
+	 * 
+	 * 	@param SampleProvider us
+	 *  @param float[] usData
+	 *  @param PController cont
+	 *  @since 1.0
+	 */
 	public UltrasonicPoller(SampleProvider us, float[] usData, PController cont) {
 		this.us = us;
 		this.cont = cont;
 		this.usData = usData;
 	}
 
-//  Sensors now return floats using a uniform protocol.
-//  Need to convert US result to an integer [0,255]
-	
+	/**
+	 *  Run the ultrasonic poller
+	 * 
+	 *  @return No return value
+	 *  @since 1.0
+	 */
 	public void run() {
 		int distance;
 		while (true) {

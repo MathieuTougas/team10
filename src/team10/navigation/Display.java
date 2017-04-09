@@ -21,6 +21,7 @@ public class Display extends Thread {
 	/**
 	 *  Constructor
 	 * 
+	 *  @param Odometer odometer
 	 *  @since 1.0
 	 */
 	public Display(Odometer odometer) {
@@ -29,7 +30,8 @@ public class Display extends Thread {
 
 	/**
 	 *  Thread updating the display
-	 * 
+	 * 	
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void run() {
@@ -89,7 +91,10 @@ public class Display extends Thread {
 	
 	/**
 	 *  Formats a double input as a string
-	 * 
+	 * 	
+	 *  @param double x - the double to convert
+	 *  @param int places - the number of decimal places
+	 *  @return String result
 	 *  @since 1.0
 	 */
 	private static String formattedDoubleToString(double x, int places) {
@@ -135,7 +140,8 @@ public class Display extends Thread {
 	
 	/**
 	 *  Clears the display
-	 * 
+	 *  
+	 *  @return No return value
 	 *  @since 1.1
 	 */
 	public void clear() {

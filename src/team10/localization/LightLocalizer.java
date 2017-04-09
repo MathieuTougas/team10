@@ -37,6 +37,12 @@ public class LightLocalizer {
 	/**
 	 *  Constructor
 	 * 
+	 * 	@param Odometer odometer
+	 *  @param Navigation navigation
+	 *  @param SampleProvider leftColorSensor
+	 *  @param float[] leftColorData
+	 *  @param SampleProvider rightColorSensor
+	 *  @param float[] rightColorData
 	 *  @since 1.0
 	 */
 	public LightLocalizer(Odometer odometer, Navigation navigation, SampleProvider leftColorSensor, float[] leftColorData, SampleProvider rightColorSensor, float[] rightColorData) {
@@ -53,6 +59,7 @@ public class LightLocalizer {
 	/**
 	 *  Do the localization routine
 	 * 
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void doLocalization() {
@@ -81,7 +88,9 @@ public class LightLocalizer {
 	/**
 	 *  Do the localization routine, overriding with initial position
 	 * 
-	 *  @param initialPosition (x, y, theta)
+	 * 
+	 *  @param double[] initialPosition - {x, y, theta}
+	 *  @return No return value
 	 *  @since 2.0
 	 */
 	public void doLocalization(double[] initialPosition) {
@@ -108,6 +117,9 @@ public class LightLocalizer {
 	/**
 	 *  Run the robot forward until it reaches a line
 	 * 
+	 * 	@param String axis - the axis on which the robot is
+	 * 	@param boolean inverse - inversed if tetha = 180 or 270 degrees
+	 *  @return No return value
 	 *  @since 2.0
 	 */
 	void runUntilLine(String axis, boolean inversed){
@@ -153,6 +165,10 @@ public class LightLocalizer {
 	/**
 	 *  Correct the robot position
 	 * 
+	 * 	@param double[] initialPosition - the array of inital positions
+	 * 	@param String axis - the axis on which the robot is travelling
+	 *  @param boolean inversed - inversed if the robot is heading towards 180 or 270 degrees
+	 *  @return No return value
 	 *  @since 2.0
 	 */
 	private void correctPosition(double[] positions, String axis, boolean inversed){
@@ -177,6 +193,9 @@ public class LightLocalizer {
 	/**
 	 *  Back the robot off by distance and axis
 	 * 
+	 * 	@param double point - the point to back-off to
+	 * 	@param char axis - the axis to back-off on
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	private void backOff(double point, char axis){
@@ -202,6 +221,7 @@ public class LightLocalizer {
 	/**
 	 *  Get data from the left color sensor
 	 * 
+	 *  @return float color
 	 *  @since 2.0
 	 */
 	private float getLeftColorData() {
@@ -212,7 +232,8 @@ public class LightLocalizer {
 	
 	/**
 	 *  Get data from the rightcolor sensor
-	 * 
+	 * 	
+	 *  @return float color
 	 *  @since 1.0
 	 */
 	private float getRightColorData() {

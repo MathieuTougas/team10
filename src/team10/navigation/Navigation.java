@@ -23,14 +23,12 @@ public class Navigation {
 	static double destX, destY, distW;
 	private double currentX, currentY, wheelRadius, width;
 	private boolean onPoint, passed;
-	private SampleProvider usDistance;
-	private float[] usData;
 	
 	public static double angleToTurn;
 	
 	/**
 	 *  Constructor
-	 * 
+	 * 	@param Odometer odometer
 	 *  @since 1.0
 	 */
 	public Navigation (Odometer odometer) {
@@ -45,9 +43,11 @@ public class Navigation {
 	}
 	
 	/**
-	 * Get forward SPEED
-	 * 
-	 *  @since 1.0
+	 *  Get forward SPEED
+	 *  
+	 * 	@param No parameter
+	 *  @return int FORWARD_SPEED
+	 *  @since 2.0
 	 */
 	public static int getForwardSpeed(){
 		return FORWARD_SPEED;
@@ -56,7 +56,9 @@ public class Navigation {
 	/**
 	 *  Get rotate Speed
 	 * 
-	 *  @since 1.0
+	 * 	@param No parameter
+	 *  @return int ROTATE_SPEED
+	 *  @since 2.0
 	 */
 	public static int getTurnSpeed(){
 		return ROTATE_SPEED;
@@ -64,7 +66,9 @@ public class Navigation {
 	
 	/**
 	 *  Drives to the set destinations
-	 * 
+	 * 	
+	 *  @param int[] destinations - the points to travel-to
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void drive(int[] destinations) {
@@ -109,6 +113,9 @@ public class Navigation {
 	/**
 	 *  Functions to set the motor speeds jointly
 	 *  
+	 *  @param float lSpd - the speed to set the left motor to
+	 *  @param float rSpd - the speed to set the right motor to
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void setSpeeds(float lSpd, float rSpd) {
@@ -126,7 +133,10 @@ public class Navigation {
 	
 	/**
 	 *  Converts distance in wheelturns
-	 * 
+	 * 	
+	 *  @param double radius - the radius of the wheels
+	 *  @param double distance - the distance to cover
+	 *  @return int wheelturns - the number of wheelturns to cover
 	 *  @since 1.0
 	 */
 	private static int convertDistance(double radius, double distance) {
@@ -134,8 +144,12 @@ public class Navigation {
 	}
 
 	/**
-	 *  Converts radians to degrees
-	 * 
+	 *  Converts radians  wheelturns
+	 * 	
+	 *  @param double radius - the radius of the wheels
+	 *  @param double width - the robot track width
+	 *  @param double distance - the distance to cover
+	 *  @return int wheelturns - the number of wheelturns to cover
 	 *  @since 1.0
 	 */
 	private static int convertAngle(double radius, double width, double angle) {
@@ -143,7 +157,14 @@ public class Navigation {
 	}
 	
 
-	
+	/**
+	 *  Travel to a set point
+	 * 	
+	 *  @param double x - x-coordinate to travel to
+	 *  @param double y - y coordinate to travel to
+	 *  @return No return value
+	 *  @since 1.0
+	 */
 	public void travelTo(double x, double y){
 		// Turn to the desired angle
 		currentX = odometer.getX();
@@ -173,7 +194,9 @@ public class Navigation {
 	
 	/**
 	 *  Turn to the desired angle (rads)
-	 * 
+	 * 	
+	 *  @param double tetha - angle to turn in rads
+	 *  @return No return value
 	 *  @since 2.0
 	 */
 	public void turn(double tetha){
@@ -193,7 +216,9 @@ public class Navigation {
 	
 	/**
 	 *  Turn to the desired angle (rads)
-	 * 
+	 * 	
+	 *  @param double tetha - angle to turn to in rads
+	 *  @return No return value
 	 *  @since 2.0
 	 */
 	public void turnTo(double tetha){
@@ -204,9 +229,9 @@ public class Navigation {
 	/**
 	 *  Turn to desired angle, relative to xy plane
 	 *  
-	 *  @param double angle (degrees)
-	 *  @param boolean stop
-	 *  
+	 *  @param double angle - angle to turn in degrees
+	 *  @param boolean stop - if true, stop the wheels after the turn
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void turnTo(double angle, boolean stop) {
@@ -234,7 +259,9 @@ public class Navigation {
 	
 	/**
 	 * Go foward a set distance in cm
-	 * 
+	 * 	
+	 *  @param double distance - distance to go forward in cm
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void goForward(double distance) {
@@ -248,7 +275,8 @@ public class Navigation {
 	
 	/**
 	 *  Check for the position while it's moving
-	 * 
+	 * 	
+	 *  @return boolean navigating - true if the robot is navigating
 	 *  @since 1.0
 	 */
 	private boolean isNavigating(){
@@ -269,19 +297,13 @@ public class Navigation {
 	}
 	
 	/**
-	 * Get the distance from the US sensor
-	 * 
-	 *  @since 1.0
-	 */
-	private int getUsDistance(SampleProvider us, float[] usData){
-		us.fetchSample(usData,0);// acquire data
-		int distance=(int)(usData[0]*100.0);
-		return distance;
-	}
-	
-	/**
 	 * Get the angle to travel. This function handles negative x values
-	 * 
+	 * 	
+	 *  @param double initialX - inital x position
+	 *  @param double initialY - initial y position
+	 *  @param double finalX - destination y
+	 *  @param double finalY - destination x
+	 *  @return double tetha - in rads
 	 *  @since 1.0
 	 */
 	private double getAngle(double initialX, double initialY, double finalX, double finalY){
@@ -303,7 +325,9 @@ public class Navigation {
 	
 	/**
 	 *  Wait a determined amount of time
-	 * 
+	 * 	
+	 * 	@param double seconds - amount time to wait
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public static void wait(double seconds){
@@ -315,9 +339,11 @@ public class Navigation {
 	}
 	
 	/**
-	 *  Wait a determined amount of time
-	 * 
-	 *  @since 1.0
+	 *  Convert a number of tiles to a distance on the field (cm)
+	 *  
+	 * 	@param int tile - the number of tiles
+	 *  @return double distance - in cm
+	 *  @since 2.0
 	 */
 	public static double convertTileToDistance(int tile){
 		return tile*TILE_SIZE + TILE_SIZE;
