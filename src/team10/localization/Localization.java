@@ -10,6 +10,13 @@ import lejos.robotics.SampleProvider;
 import team10.navigation.Navigation;
 import team10.navigation.Odometer;
 
+/**
+ * Handles the localization routine for the robot
+ * 
+ * @author Mathieu Tougas
+ * @version 2.0
+ * 
+ */
 public class Localization {
 	private static final Port usPort = LocalEV3.get().getPort("S4");		
 	private static final Port leftColorPort = LocalEV3.get().getPort("S2");	
@@ -22,6 +29,8 @@ public class Localization {
 	/**
 	 *  Constructor
 	 * 
+	 * 	@param Odometer odometer
+	 *  @param Navigation navigation
 	 *  @since 1.0
 	 */
 	public Localization (Odometer odometer, Navigation navigation){
@@ -32,7 +41,8 @@ public class Localization {
 	/**
 	 *  Do the localisation routine, given initial starting corner
 	 * 
-	 *  @param initialPosition (x, y, theta)
+	 *  @param double[] initalPosition - the initialPosition given the starting corner
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void doLocalization(double[] initialPosition) {
@@ -62,8 +72,6 @@ public class Localization {
 		USLocalizer usl = new USLocalizer(odometer, navigation, usValue, usData, localization_type);
 		usl.doLocalization();
 		
-		//while (Button.waitForAnyPress() != Button.ID_ENTER);
-		
 		// perform the light sensor localization
 		LightLocalizer lsl = new LightLocalizer(odometer, navigation, leftColorValue, leftColorData, rightColorValue, rightColorData);
 		lsl.doLocalization(initialPosition);
@@ -71,6 +79,12 @@ public class Localization {
 		Sound.beep();
 	}
 	
+	/**
+	 *  Correct position using light sensors before shot, goes forward until it crosses a line
+	 * 
+	 *  @return No return value
+	 *  @since 2.0
+	 */
 	public void correctBeforeShort(){
 		// Setup color sensor
 		float[] leftColorData = new float[leftColorValue.sampleSize()];

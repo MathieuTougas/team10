@@ -9,7 +9,6 @@ import team10.navigation.Navigation;
 import team10.navigation.Odometer;
 import team10.wifi.WifiConnection;
 
-// TODO Add filtering for light sensor
 /**
  * Main class for robot control
  * 
@@ -43,7 +42,6 @@ public class Main {
 		
 		// Get data
 		try {
-			// Get data
 			@SuppressWarnings("rawtypes")
 			Map data = conn.getData();
 
@@ -82,19 +80,18 @@ public class Main {
 					yDest += 1;
 					break;
 				case "E":
-					yDest += 1;
+					xDest += 1;
 					break;
 				case "S":
 					yDest -= 1;
 					break;
 				case "W":
-					yDest -= 1;
+					xDest -= 1;
 					break;	
 				}
 				
 				// Go the the middle of the field
-				navigation.travelTo(Navigation.convertTileToDistance(2), Navigation.convertTileToDistance(2));
-				navigation.travelTo(Navigation.convertTileToDistance(4), Navigation.convertTileToDistance(4));
+				navigation.travelTo((Math.abs(initialPosition[0] - Navigation.convertTileToDistance(3))), Math.abs(initialPosition[1] - Navigation.convertTileToDistance(3)));
 				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(5));
 				
 				// Shooting loop
@@ -106,11 +103,17 @@ public class Main {
 					navigation.travelTo(Navigation.convertTileToDistance(xDest), Navigation.convertTileToDistance(yDest));
 					
 					// Go to the ball dispenser
-					if (disp_orientation.equals("N") || disp_orientation.equals("S")){
-						navigation.travelTo(Navigation.convertTileToDistance(disp_x), Navigation.convertTileToDistance(disp_y)-10);
+					if (disp_orientation.equals("N")){
+						navigation.travelTo(Navigation.convertTileToDistance(disp_x), Navigation.convertTileToDistance(disp_y) + 15);
+					}
+					else if (disp_orientation.equals("S")){
+						navigation.travelTo(Navigation.convertTileToDistance(disp_x), Navigation.convertTileToDistance(disp_y) - 15);
+					}
+					else if (disp_orientation.equals("W")){
+						navigation.travelTo(Navigation.convertTileToDistance(disp_x) - 15, Navigation.convertTileToDistance(disp_y));
 					}
 					else {
-						navigation.travelTo(Navigation.convertTileToDistance(disp_x)-10, Navigation.convertTileToDistance(disp_y));
+						navigation.travelTo(Navigation.convertTileToDistance(disp_x) + 15, Navigation.convertTileToDistance(disp_y));
 
 					}
 					// Beep to obtain ball
@@ -119,7 +122,7 @@ public class Main {
 					
 					// Back off and go to shooting line
 					navigation.goForward(-10);
-					navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(7));
+					navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(4));
 					navigation.turn(Math.PI/2 - odometer.getTheta());
 					navigation.turn(Math.PI);
 					localization.correctBeforeShort();
@@ -144,9 +147,11 @@ public class Main {
 				localization.doLocalization(initialPosition);
 				
 				// Go the the middle of the field
+				navigation.travelTo((Math.abs(initialPosition[0] - Navigation.convertTileToDistance(3))), Math.abs(initialPosition[1] - Navigation.convertTileToDistance(3)));
 				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(5));
 				
 				// Go in front of the ball dispenser
+				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(def_zone_y));
 				navigation.travelTo(Navigation.convertTileToDistance(5), Navigation.convertTileToDistance(def_zone_y-1));
 			}
 			

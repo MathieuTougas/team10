@@ -24,10 +24,13 @@ public class PController {
 	/**
 	 *  Constructor
 	 * 
+	 * 	@param EV3LargeRegulatedMotor leftMotor
+	 *  @paramEV3LargeRegulatedMotor rightMotor
+	 *  @param int bandCenter
+	 *  @param int bandwidth
 	 *  @since 1.0
 	 */
-	public PController(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor,
-					   int bandCenter, int bandwidth) {
+	public PController(EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, int bandCenter, int bandwidth) {
 		//Default Constructor
 		this.bandCenter = bandCenter;
 		this.bandwidth = bandwidth;
@@ -43,6 +46,8 @@ public class PController {
 	/**
 	 *  Filters the US data
 	 * 
+	 * 	@param int distance - distance read by the US sensor
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void processUSData(int distance) {
@@ -105,7 +110,10 @@ public class PController {
 	
 	/**
 	 *  Calculates the proportionality for direction adjustments
-	 * 
+	 * 	
+	 * 	@param int diff - the reading from the sensor
+	 * 	@param boolean leftTurn - true to turn left
+	 *  @return int correction
 	 *  @since 1.0
 	 */
 	int calcProp (int diff, boolean leftTurn) {
@@ -123,7 +131,8 @@ public class PController {
 
 	/**
 	 *  Gets US distance from sensor
-	 * 
+	 * 	
+	 *  @return int distance
 	 *  @since 1.0
 	 */
 	public int readUSDistance() {

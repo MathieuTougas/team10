@@ -28,7 +28,7 @@ public class Odometer extends Thread {
 
 	/**
 	 *  Constructor
-	 * 
+	 * 	
 	 *  @since 1.0
 	 */
 	public Odometer() {
@@ -42,7 +42,8 @@ public class Odometer extends Thread {
 	
 	/**
 	 *  Return the wheel radius
-	 * 
+	 *  
+	 *  @return double WHEEL_RADIUS
 	 *  @since 1.0
 	 */
 	public static double getWheelRadius(){
@@ -52,6 +53,7 @@ public class Odometer extends Thread {
 	/**
 	 *  Return the wheel base
 	 * 
+	 * 	@return double WHEEL_BASE
 	 *  @since 1.0
 	 */
 	public static double getWheelBase(){
@@ -60,7 +62,8 @@ public class Odometer extends Thread {
 
 	/**
 	 *  Runs the odometer as a thread
-	 * 
+	 * 	
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void run() {
@@ -132,7 +135,10 @@ public class Odometer extends Thread {
 
 	/**
 	 *  Accesssor
-	 * 
+	 *  
+	 * 	@param double[] position
+	 * 	@param boolean[] update - if true, update position
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void getPosition(double[] position, boolean[] update) {
@@ -146,7 +152,13 @@ public class Odometer extends Thread {
 				position[2] = theta;
 		}
 	}
-
+	
+	/**
+	 *  Accesssor
+	 *  
+	 *  @return double x
+	 *  @since 1.0
+	 */
 	public double getX() {
 		double result;
 
@@ -156,7 +168,13 @@ public class Odometer extends Thread {
 
 		return result;
 	}
-
+	
+	/**
+	 *  Accesssor
+	 *  
+	 *  @return double y
+	 *  @since 1.0
+	 */
 	public double getY() {
 		double result;
 
@@ -166,7 +184,13 @@ public class Odometer extends Thread {
 
 		return result;
 	}
-
+	
+	/**
+	 *  Accesssor
+	 *  
+	 *  @return double theta
+	 *  @since 1.0
+	 */
 	public double getTheta() {
 		double result;
 
@@ -177,6 +201,13 @@ public class Odometer extends Thread {
 		return result;
 	}
 	
+	/**
+	 *  Accesssor
+	 *  
+	 *  @param boolean degrees - if true, return the angle in degrees
+	 *  @return double theta
+	 *  @since 1.0
+	 */
 	public double getTheta(boolean degrees) {
 		double result;
 
@@ -192,7 +223,10 @@ public class Odometer extends Thread {
 
 	/**
 	 *  Mutator
-	 * 
+	 *  
+	 * 	@param double[] position
+	 * 	@param boolean[] update - if true, update position
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	public void setPosition(double[] position, boolean[] update) {
@@ -206,26 +240,52 @@ public class Odometer extends Thread {
 				theta = position[2];
 		}
 	}
-
+	
+	/**
+	 *  Mutator
+	 *  
+	 *  @param double x
+	 *  @return No return value
+	 *  @since 1.0
+	 */
 	public void setX(double x) {
 		synchronized (lock) {
 			this.x = x;
 		}
 	}
-
+	
+	/**
+	 *  Mutator
+	 *  
+	 *  @param double y
+	 *  @return No return value
+	 *  @since 1.0
+	 */
 	public void setY(double y) {
 		synchronized (lock) {
 			this.y = y;
 		}
 	}
-
+	
+	/**
+	 *  Mutator
+	 *  
+	 *  @param double theta
+	 *  @return No return value
+	 *  @since 1.0
+	 */
 	public void setTheta(double theta) {
 		synchronized (lock) {
 			this.theta = theta;
 		}
 	}
+	
 	/**
-	 * @return angle in radians
+	 *  Convert the angle from degrees to radians
+	 *  
+	 *  @param double degrees
+	 *  @return double angle - in rads
+	 *  @since 2.0
 	 */
 	public static double getRadAngle(double degrees) {
 		return degrees*Math.PI/180;
@@ -234,14 +294,21 @@ public class Odometer extends Thread {
 	
 
 	/**
+	 * Accessor
+	 * 
 	 * @return the leftMotorTachoCount
+	 * @since 1.0
 	 */
 	public int getLeftMotorTachoCount() {
 		return leftMotorTachoCount;
 	}
 
 	/**
+	 * Mutator
+	 * 
 	 * @param leftMotorTachoCount the leftMotorTachoCount to set
+	 * @return No return value
+	 * @since 1.0
 	 */
 	public void setLeftMotorTachoCount(int leftMotorTachoCount) {
 		synchronized (lock) {
@@ -250,14 +317,21 @@ public class Odometer extends Thread {
 	}
 
 	/**
+	 * Accessor
+	 * 
 	 * @return the rightMotorTachoCount
+	 * @since 1.0
 	 */
 	public int getRightMotorTachoCount() {
 		return rightMotorTachoCount;
 	}
 
 	/**
+	 * Mutator
+	 * 
 	 * @param rightMotorTachoCount the rightMotorTachoCount to set
+	 * @return No return value
+	 * @since 1.0
 	 */
 	public void setRightMotorTachoCount(int rightMotorTachoCount) {
 		synchronized (lock) {
@@ -266,9 +340,10 @@ public class Odometer extends Thread {
 	}
 	
 	/**
-	 * Get the angle to travel. This function handles negative x values
+	 * Prevent other actions before the motor has completed its run
 	 * 
-	 *  @since 1.0
+	 * @return No return value
+	 * @since 2.0
 	 */
 	public static void waitTillCompleted(){
 		for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] { leftMotor, rightMotor }) {

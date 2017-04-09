@@ -22,7 +22,7 @@ public class StringLauncher {
 	
 	/**
 	 *  Constructor
-	 * 
+	 * 	
 	 *  @since 2.0
 	 */
 	public StringLauncher (){
@@ -31,7 +31,8 @@ public class StringLauncher {
 	
 	/**
 	 *  Fire the ball
-	 * 
+	 *  
+	 *  @return No return value
 	 *  @since 2.0
 	 */
 	public void fire() {
@@ -44,7 +45,8 @@ public class StringLauncher {
 	
 	/**
 	 *  Lower the catapult
-	 * 
+	 * 	
+	 *  @return No return value
 	 *  @since 2.0
 	 */
 	public void lowerCatapult() {

@@ -29,6 +29,11 @@ public class USLocalizer {
 	/**
 	 * Constructor method
 	 * 
+	 * @param Odometer odo
+	 * @param Navigation navigation
+	 * @param SampleProvider usSensor
+	 * @param float[] usData
+	 * @param LocalizationType locType
 	 * @since 1.0
 	 */
 	public USLocalizer(Odometer odo,  Navigation navigation, SampleProvider usSensor, float[] usData, LocalizationType locType) {
@@ -43,6 +48,7 @@ public class USLocalizer {
 	/**
 	 * Does the ev3 localisation routine
 	 * 
+	 * @return No return value
 	 * @since 1.0
 	 */
 	public void doLocalization() {
@@ -131,9 +137,10 @@ public class USLocalizer {
 	}
 	
 	/**
-	 * Turns the robot until the sensors don't detect a wall anymore
+	 *  Turns the robot until the sensors don't detect a wall anymore
 	 * 
-	 * @since 1.0
+	 *  @return No return value
+	 *  @since 1.0
 	 */
 	private void turnUntilNoWall(){
 		distance = getFilteredData();
@@ -150,8 +157,9 @@ public class USLocalizer {
 	}
 	
 	/**
-	 * Turns the robot until the sensors detect a wall
-	 * 
+	 *  Turns the robot until the sensors detect a wall
+	 * 	
+	 *  @return No return value
 	 *  @since 1.0
 	 */
 	private void turnUntilWall(){
@@ -171,6 +179,7 @@ public class USLocalizer {
 	/**
 	 *  Get filtered data from US Sensor
 	 * 
+	 *  @return float distance - the distance read by the US sensor
 	 *  @since 1.0
 	 */
 	private float getFilteredData() {
@@ -184,8 +193,11 @@ public class USLocalizer {
 	}
 	
 	/**
-	 *  Return starting angle in degrees
+	 *  Return starting angle in degrees from 2 angles latched
 	 * 
+	 * 	@param double alpha - the first angle latched
+	 *  @param double beta - the second angle latched
+	 *  @return double starting angle - in degrees
 	 *  @since 1.0
 	 */
 	private double getStartingAngle(double alpha, double beta){
